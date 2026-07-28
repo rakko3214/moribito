@@ -1,4 +1,4 @@
-# Project 守人 ドキュメント索引
+# 結師 ドキュメント索引
 
 Status: Approved  
 Last updated: 2026-07-28
@@ -14,8 +14,10 @@ Last updated: 2026-07-28
 
 - [`narrative/WORLD.md`](narrative/WORLD.md)
 - [`narrative/MAIN_STORY.md`](narrative/MAIN_STORY.md)
+- [`narrative/PROLOGUE_CHAPTER1.md`](narrative/PROLOGUE_CHAPTER1.md)
 - [`narrative/CHARACTERS.md`](narrative/CHARACTERS.md)
 - [`narrative/GRANDFATHER_NOTEBOOK.md`](narrative/GRANDFATHER_NOTEBOOK.md)
+- [`world/TERMS.md`](world/TERMS.md)
 
 ## システム
 
