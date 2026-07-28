@@ -21,6 +21,7 @@ Last updated: 2026-07-28
 
 - [`systems/CORE_LOOP.md`](systems/CORE_LOOP.md)
 - [`systems/TIME_SEASONS_STAMINA.md`](systems/TIME_SEASONS_STAMINA.md)
+- [`systems/MINIGAME_FRAMEWORK.md`](systems/MINIGAME_FRAMEWORK.md)
 - [`systems/KEGARE_SHINKI.md`](systems/KEGARE_SHINKI.md)
 - [`systems/FARMING.md`](systems/FARMING.md)
 - [`systems/COOKING.md`](systems/COOKING.md)
@@ -35,6 +36,7 @@ Last updated: 2026-07-28
 - [`content/YOKAI.md`](content/YOKAI.md)
 - [`content/VILLAGERS.md`](content/VILLAGERS.md)
 - [`content/CROPS.md`](content/CROPS.md)
+- [`content/MINIGAME_CATALOG.md`](content/MINIGAME_CATALOG.md)
 - [`world/VILLAGE.md`](world/VILLAGE.md)
 
 ## アート・技術
@@ -49,4 +51,3 @@ Last updated: 2026-07-28
 - 新しい決定は `DECISIONS.md` と関連する詳細仕様の両方へ反映する。
 - 複数システムへ影響する変更は `MASTER_GDD.md` も更新する。
 - 未決定事項は勝手に正式仕様へ昇格させず、`OPEN_QUESTIONS.md` に記録する。
-
