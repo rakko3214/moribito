@@ -35,6 +35,7 @@ Last updated: 2026-07-29
 - [`systems/COEXISTENCE.md`](systems/COEXISTENCE.md)
 - [`systems/SHRINE_AND_OFFERINGS.md`](systems/SHRINE_AND_OFFERINGS.md)
 - [`systems/COMBAT.md`](systems/COMBAT.md)
+- [`systems/PLAYER_COMBAT_GROWTH.md`](systems/PLAYER_COMBAT_GROWTH.md)
 - [`systems/FISHING.md`](systems/FISHING.md)
 
 ## コンテンツ・世界
