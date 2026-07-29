@@ -1,7 +1,12 @@
 # 村・マップ構成
 
 Status: Approved  
-Last updated: 2026-07-28
+Last updated: 2026-07-29
+
+Related documents:
+
+- [`WORLD_MAP.md`](WORLD_MAP.md)
+- [`../systems/COEXISTENCE.md`](../systems/COEXISTENCE.md)
 
 ## コンセプト
 
@@ -65,3 +70,4 @@ Last updated: 2026-07-28
 - 祭りが開催される
 - BGM、色、会話が明るくなる
 
+村の発展は、人間と妖怪の共存度とも連携する。共存度が上がると、妖怪が村を訪れ、村人が妖怪を認識し、共同の仕事や祭りが発生する。

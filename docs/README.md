@@ -1,7 +1,7 @@
 # 結師 ドキュメント索引
 
 Status: Approved  
-Last updated: 2026-07-28
+Last updated: 2026-07-29
 
 ## 最初に読む文書
 
@@ -15,7 +15,10 @@ Last updated: 2026-07-28
 - [`narrative/WORLD.md`](narrative/WORLD.md)
 - [`narrative/MAIN_STORY.md`](narrative/MAIN_STORY.md)
 - [`narrative/PROLOGUE_CHAPTER1.md`](narrative/PROLOGUE_CHAPTER1.md)
+- [`narrative/CHAPTER_OUTLINE.md`](narrative/CHAPTER_OUTLINE.md)
 - [`narrative/CHARACTERS.md`](narrative/CHARACTERS.md)
+- [`narrative/ZASHIKI_WARASHI.md`](narrative/ZASHIKI_WARASHI.md)
+- [`narrative/WORLD_HISTORY.md`](narrative/WORLD_HISTORY.md)
 - [`narrative/GRANDFATHER_NOTEBOOK.md`](narrative/GRANDFATHER_NOTEBOOK.md)
 - [`world/TERMS.md`](world/TERMS.md)
 
@@ -29,6 +32,7 @@ Last updated: 2026-07-28
 - [`systems/COOKING.md`](systems/COOKING.md)
 - [`systems/GATHERING.md`](systems/GATHERING.md)
 - [`systems/YOKAI_FRIENDSHIP.md`](systems/YOKAI_FRIENDSHIP.md)
+- [`systems/COEXISTENCE.md`](systems/COEXISTENCE.md)
 - [`systems/SHRINE_AND_OFFERINGS.md`](systems/SHRINE_AND_OFFERINGS.md)
 - [`systems/COMBAT.md`](systems/COMBAT.md)
 - [`systems/FISHING.md`](systems/FISHING.md)
@@ -40,6 +44,7 @@ Last updated: 2026-07-28
 - [`content/CROPS.md`](content/CROPS.md)
 - [`content/MINIGAME_CATALOG.md`](content/MINIGAME_CATALOG.md)
 - [`world/VILLAGE.md`](world/VILLAGE.md)
+- [`world/WORLD_MAP.md`](world/WORLD_MAP.md)
 
 ## アート・技術
 
