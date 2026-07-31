@@ -1,7 +1,7 @@
 # 妖怪図鑑・コンテンツ設計
 
 Status: Partially Approved
-Last updated: 2026-07-29
+Last updated: 2026-07-31
 
 ## 想定構成
 
@@ -110,6 +110,8 @@ Last updated: 2026-07-29
 - 友情を深める
 
 単なる発見図鑑ではなく、妖怪を理解する図鑑とする。
+
+妖怪帳では、遭遇時の第一印象から友好度Rank ★5の完全情報まで段階的に記録を解放する。詳細は [`YOKAI_BOOK.md`](YOKAI_BOOK.md) を参照。
 
 ## 個体テンプレート
 

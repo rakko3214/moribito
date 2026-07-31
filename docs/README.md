@@ -41,6 +41,7 @@ Last updated: 2026-07-29
 ## コンテンツ・世界
 
 - [`content/YOKAI.md`](content/YOKAI.md)
+- [`content/YOKAI_BOOK.md`](content/YOKAI_BOOK.md)
 - [`content/VILLAGERS.md`](content/VILLAGERS.md)
 - [`content/CROPS.md`](content/CROPS.md)
 - [`content/MINIGAME_CATALOG.md`](content/MINIGAME_CATALOG.md)
