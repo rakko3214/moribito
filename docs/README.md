@@ -42,6 +42,7 @@ Last updated: 2026-08-04
 
 - [`content/YOKAI.md`](content/YOKAI.md)
 - [`content/YOKAI_KITSUNE.md`](content/YOKAI_KITSUNE.md)
+- [`content/YOKAI_KAPPA.md`](content/YOKAI_KAPPA.md)
 - [`content/YOKAI_BOOK.md`](content/YOKAI_BOOK.md)
 - [`content/VILLAGERS.md`](content/VILLAGERS.md)
 - [`content/CROPS.md`](content/CROPS.md)
