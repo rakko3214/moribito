@@ -1,7 +1,7 @@
 # 結師 ドキュメント索引
 
 Status: Approved  
-Last updated: 2026-07-29
+Last updated: 2026-08-04
 
 ## 最初に読む文書
 
@@ -41,6 +41,7 @@ Last updated: 2026-07-29
 ## コンテンツ・世界
 
 - [`content/YOKAI.md`](content/YOKAI.md)
+- [`content/YOKAI_KITSUNE.md`](content/YOKAI_KITSUNE.md)
 - [`content/YOKAI_BOOK.md`](content/YOKAI_BOOK.md)
 - [`content/VILLAGERS.md`](content/VILLAGERS.md)
 - [`content/CROPS.md`](content/CROPS.md)
