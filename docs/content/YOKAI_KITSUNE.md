@@ -1,6 +1,6 @@
 # 妖狐
 
-Status: Approved  
+Status: Approved
 Last updated: 2026-08-04
 
 ## 基本設定
