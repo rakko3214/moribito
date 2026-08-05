@@ -45,6 +45,8 @@ Last updated: 2026-08-04
 - [`content/YOKAI_KAPPA.md`](content/YOKAI_KAPPA.md)
 - [`content/YOKAI_BOOK.md`](content/YOKAI_BOOK.md)
 - [`content/VILLAGERS.md`](content/VILLAGERS.md)
+- [`content/VILLAGER_SHIKI.md`](content/VILLAGER_SHIKI.md)
+- [`content/VILLAGER_KAEDE.md`](content/VILLAGER_KAEDE.md)
 - [`content/VILLAGER_GENJI.md`](content/VILLAGER_GENJI.md)
 - [`content/VILLAGER_GENZO.md`](content/VILLAGER_GENZO.md)
 - [`content/VILLAGER_TESSAI.md`](content/VILLAGER_TESSAI.md)
