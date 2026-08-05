@@ -1,7 +1,7 @@
 # 結師 ドキュメント索引
 
 Status: Approved  
-Last updated: 2026-07-29
+Last updated: 2026-08-04
 
 ## 最初に読む文書
 
@@ -41,8 +41,17 @@ Last updated: 2026-07-29
 ## コンテンツ・世界
 
 - [`content/YOKAI.md`](content/YOKAI.md)
+- [`content/YOKAI_KITSUNE.md`](content/YOKAI_KITSUNE.md)
+- [`content/YOKAI_KAPPA.md`](content/YOKAI_KAPPA.md)
 - [`content/YOKAI_BOOK.md`](content/YOKAI_BOOK.md)
 - [`content/VILLAGERS.md`](content/VILLAGERS.md)
+- [`content/VILLAGER_SHIKI.md`](content/VILLAGER_SHIKI.md)
+- [`content/VILLAGER_KAEDE.md`](content/VILLAGER_KAEDE.md)
+- [`content/VILLAGER_GENJI.md`](content/VILLAGER_GENJI.md)
+- [`content/VILLAGER_GENZO.md`](content/VILLAGER_GENZO.md)
+- [`content/VILLAGER_TESSAI.md`](content/VILLAGER_TESSAI.md)
+- [`content/VILLAGER_ITSUKI.md`](content/VILLAGER_ITSUKI.md)
+- [`content/VILLAGER_SOGEN.md`](content/VILLAGER_SOGEN.md)
 - [`content/CROPS.md`](content/CROPS.md)
 - [`content/MINIGAME_CATALOG.md`](content/MINIGAME_CATALOG.md)
 - [`world/VILLAGE.md`](world/VILLAGE.md)
