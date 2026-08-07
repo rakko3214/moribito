@@ -1,7 +1,7 @@
 # 結師 ドキュメント索引
 
 Status: Approved  
-Last updated: 2026-08-04
+Last updated: 2026-08-07
 
 ## 最初に読む文書
 
@@ -17,6 +17,7 @@ Last updated: 2026-08-04
 - [`narrative/PROLOGUE_CHAPTER1.md`](narrative/PROLOGUE_CHAPTER1.md)
 - [`narrative/CHAPTER_OUTLINE.md`](narrative/CHAPTER_OUTLINE.md)
 - [`narrative/CHAPTER_02.md`](narrative/CHAPTER_02.md)
+- [`narrative/CHAPTER_03.md`](narrative/CHAPTER_03.md)
 - [`narrative/CHARACTERS.md`](narrative/CHARACTERS.md)
 - [`narrative/ZASHIKI_WARASHI.md`](narrative/ZASHIKI_WARASHI.md)
 - [`narrative/WORLD_HISTORY.md`](narrative/WORLD_HISTORY.md)
