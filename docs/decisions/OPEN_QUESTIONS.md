@@ -5,24 +5,12 @@ Last updated: 2026-08-07
 
 ## 優先度：高
 
-### ゲームエンジン
-
-Godot 4とUnityが会話内で混在している。正式決定していない。
-
-比較項目：
-
-- 2D制作効率
-- モバイル実機対応
-- 外部SDK連携
-- ライセンスと費用
-- Codexによる保守性
-- チーム規模
-
 ### First Playable技術基盤
 
-- Web・スマートフォンの対応範囲とビルド方式
 - 画面解像度、アスペクト比、入力方式
-- シーン構成、マップ方式、データ駆動設計
+- React・Phaser間のGameBridgeイベント名、payload、応答、エラー型
+- Phaser Sceneの最終構成、Scene間状態、ローディング境界
+- JSONデータの形式、ID規則、スキーマ検証
 - Google認証とユーザーIDの実装方式
 - AWSを採用するか。採用時のCognito、API Gateway、Lambda、DynamoDB構成
 - セーブデータ構造、オートセーブ、手動セーブ、セーブスロット

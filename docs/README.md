@@ -67,6 +67,7 @@ Last updated: 2026-08-07
 
 - [`art/ART_DIRECTION.md`](art/ART_DIRECTION.md)
 - [`technical/ENGINE_DECISION.md`](technical/ENGINE_DECISION.md)
+- [`technical/TECH_STACK.md`](technical/TECH_STACK.md)
 
 ## 更新ルール
 
