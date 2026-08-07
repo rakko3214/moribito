@@ -9,6 +9,7 @@ Last updated: 2026-08-07
 2. [`decisions/DECISIONS.md`](decisions/DECISIONS.md) — 正式決定事項
 3. [`decisions/OPEN_QUESTIONS.md`](decisions/OPEN_QUESTIONS.md) — 未決定事項と矛盾
 4. [`MVP.md`](MVP.md) — 最初に制作する試作範囲
+5. [`FIRST_PLAYABLE.md`](FIRST_PLAYABLE.md) — プロローグから第3章終了までの実装範囲
 
 ## 物語・世界観
 

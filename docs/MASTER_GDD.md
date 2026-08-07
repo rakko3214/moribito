@@ -5,6 +5,8 @@ Last updated: 2026-08-07
 
 ## 1. ゲーム概要
 
+開発は、小規模な技術検証用MVPと、プロローグから第3章終了までを通して遊べるFirst Playableを分けて進める。First Playableでは生活、戦闘、物語の基本ループを完成させ、妖怪友好度と妖怪札の本格実装は第4章以降へ回す。詳細は [`FIRST_PLAYABLE.md`](FIRST_PLAYABLE.md) を参照。
+
 ### タイトル
 
 結師（ゆいし）
