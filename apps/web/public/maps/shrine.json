@@ -1,0 +1,11 @@
+{
+  "compressionlevel": -1, "height": 20, "infinite": false,
+  "layers": [
+    {"id":1,"name":"collisions","type":"objectgroup","visible":true,"opacity":1,"x":0,"y":0,"draworder":"topdown","objects":[
+      {"id":1,"name":"north","type":"","x":0,"y":0,"width":768,"height":32,"rotation":0,"visible":true},{"id":2,"name":"west","type":"","x":0,"y":0,"width":32,"height":640,"rotation":0,"visible":true},{"id":3,"name":"east","type":"","x":736,"y":0,"width":32,"height":640,"rotation":0,"visible":true},{"id":4,"name":"south-left","type":"","x":0,"y":608,"width":320,"height":32,"rotation":0,"visible":true},{"id":5,"name":"south-right","type":"","x":448,"y":608,"width":320,"height":32,"rotation":0,"visible":true},{"id":6,"name":"main-hall","type":"","x":220,"y":70,"width":328,"height":150,"rotation":0,"visible":true},{"id":7,"name":"tree-left","type":"","x":90,"y":260,"width":90,"height":100,"rotation":0,"visible":true},{"id":8,"name":"tree-right","type":"","x":588,"y":260,"width":90,"height":100,"rotation":0,"visible":true}
+    ]},
+    {"id":2,"name":"spawns","type":"objectgroup","visible":true,"opacity":1,"x":0,"y":0,"draworder":"topdown","objects":[{"id":9,"name":"start","type":"","point":true,"x":384,"y":430,"width":0,"height":0,"rotation":0,"visible":true},{"id":10,"name":"entrance","type":"","point":true,"x":384,"y":550,"width":0,"height":0,"rotation":0,"visible":true}]},
+    {"id":3,"name":"transitions","type":"objectgroup","visible":true,"opacity":1,"x":0,"y":0,"draworder":"topdown","objects":[{"id":11,"name":"village-path","type":"","x":320,"y":590,"width":128,"height":50,"rotation":0,"visible":true,"properties":[{"name":"targetMap","type":"string","value":"map_village"},{"name":"targetSpawn","type":"string","value":"from_shrine"}]}]}
+  ],
+  "nextlayerid":4,"nextobjectid":12,"orientation":"orthogonal","renderorder":"right-down","properties":[{"name":"displayName","type":"string","value":"守人神社"},{"name":"background","type":"color","value":"#263a33"},{"name":"accent","type":"color","value":"#9a5b54"}],"tiledversion":"1.11.2","tileheight":32,"tilesets":[],"tilewidth":32,"type":"map","version":"1.10","width":24
+}

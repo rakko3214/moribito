@@ -8,7 +8,7 @@ services:
       - "5173:5173"
     volumes:
       - .:/workspace
-      - moribito_node_modules:/workspace/node_modules
+      - web_node_modules:/workspace/node_modules
     environment:
       VITE_APP_ENV: local
       VITE_AUTH_MODE: mock
@@ -23,10 +23,10 @@ services:
       - "3001:3001"
     volumes:
       - .:/workspace
-      - moribito_node_modules:/workspace/node_modules
+      - api_node_modules:/workspace/node_modules
     environment:
       APP_ENV: local
 
 volumes:
-  moribito_node_modules:
-
+  web_node_modules:
+  api_node_modules:

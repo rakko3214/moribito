@@ -1,0 +1,11 @@
+{
+  "compressionlevel": -1, "height": 15, "infinite": false,
+  "layers": [
+    {"id":1,"name":"collisions","type":"objectgroup","visible":true,"opacity":1,"x":0,"y":0,"draworder":"topdown","objects":[
+      {"id":1,"name":"north","type":"","x":0,"y":0,"width":640,"height":32,"rotation":0,"visible":true},{"id":2,"name":"west","type":"","x":0,"y":0,"width":32,"height":480,"rotation":0,"visible":true},{"id":3,"name":"east","type":"","x":608,"y":0,"width":32,"height":480,"rotation":0,"visible":true},{"id":4,"name":"south-left","type":"","x":0,"y":448,"width":270,"height":32,"rotation":0,"visible":true},{"id":5,"name":"south-right","type":"","x":370,"y":448,"width":270,"height":32,"rotation":0,"visible":true},{"id":6,"name":"bed","type":"","x":80,"y":70,"width":130,"height":90,"rotation":0,"visible":true},{"id":7,"name":"storage","type":"","x":470,"y":80,"width":90,"height":80,"rotation":0,"visible":true}
+    ]},
+    {"id":2,"name":"spawns","type":"objectgroup","visible":true,"opacity":1,"x":0,"y":0,"draworder":"topdown","objects":[{"id":8,"name":"start","type":"","point":true,"x":320,"y":260,"width":0,"height":0,"rotation":0,"visible":true},{"id":9,"name":"entrance","type":"","point":true,"x":320,"y":400,"width":0,"height":0,"rotation":0,"visible":true}]},
+    {"id":3,"name":"transitions","type":"objectgroup","visible":true,"opacity":1,"x":0,"y":0,"draworder":"topdown","objects":[{"id":10,"name":"village-door","type":"","x":270,"y":430,"width":100,"height":50,"rotation":0,"visible":true,"properties":[{"name":"targetMap","type":"string","value":"map_village"},{"name":"targetSpawn","type":"string","value":"from_home"}]}]}
+  ],
+  "nextlayerid":4,"nextobjectid":11,"orientation":"orthogonal","renderorder":"right-down","properties":[{"name":"displayName","type":"string","value":"主人公の家"},{"name":"background","type":"color","value":"#473b2d"},{"name":"accent","type":"color","value":"#a9865e"}],"tiledversion":"1.11.2","tileheight":32,"tilesets":[],"tilewidth":32,"type":"map","version":"1.10","width":20
+}
