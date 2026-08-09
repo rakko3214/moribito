@@ -1,0 +1,34 @@
+{
+  "name": "moribito",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "workspaces": [
+    "apps/*",
+    "backend/*",
+    "packages/*",
+    "infra/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=@moribito/web",
+    "build": "npm run build --workspaces --if-present",
+    "lint": "eslint .",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "test:run": "npm run test:run --workspaces --if-present",
+    "cdk:synth": "npm run synth --workspace=@moribito/infra",
+    "deploy:dev": "npm run deploy:dev --workspace=@moribito/infra",
+    "deploy:prod": "npm run deploy:prod --workspace=@moribito/infra"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.4",
+    "@types/node": "22.19.19",
+    "eslint": "9.39.4",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.46.2",
+    "vitest": "4.1.10"
+  }
+}

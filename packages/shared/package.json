@@ -1,0 +1,18 @@
+{
+  "name": "@moribito/shared",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest --exclude dist/**",
+    "test:run": "vitest run --exclude dist/**"
+  },
+  "dependencies": {
+    "zod": "4.4.3"
+  }
+}

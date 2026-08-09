@@ -1,0 +1,32 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    command: npm run dev --workspace=@moribito/web -- --host 0.0.0.0
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/workspace
+      - moribito_node_modules:/workspace/node_modules
+    environment:
+      VITE_APP_ENV: local
+      VITE_AUTH_MODE: mock
+      VITE_SAVE_MODE: local
+
+  api:
+    build:
+      context: .
+      dockerfile: backend/save-api/Dockerfile
+    command: npm run dev --workspace=@moribito/save-api
+    ports:
+      - "3001:3001"
+    volumes:
+      - .:/workspace
+      - moribito_node_modules:/workspace/node_modules
+    environment:
+      APP_ENV: local
+
+volumes:
+  moribito_node_modules:
+

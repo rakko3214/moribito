@@ -1,0 +1,9 @@
+FROM node:22-alpine
+WORKDIR /workspace
+COPY package.json package-lock.json* tsconfig.base.json ./
+COPY apps/web/package.json apps/web/package.json
+COPY packages/shared/package.json packages/shared/package.json
+RUN npm install
+COPY . .
+EXPOSE 5173
+CMD ["npm", "run", "dev", "--workspace=@moribito/web", "--", "--host", "0.0.0.0"]
