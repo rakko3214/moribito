@@ -4,7 +4,11 @@ import { SaveService } from "./service.js";
 const service = new SaveService(new InMemorySaveRepository());
 const server = createServer(async (request, response) => {
   response.setHeader("content-type", "application/json; charset=utf-8");
-  response.setHeader("access-control-allow-origin", "http://localhost:5173");
+  const origin = request.headers.origin;
+  if (origin && /^https?:\/\/(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+)(:5173)?$/.test(origin)) response.setHeader("access-control-allow-origin", origin);
+  response.setHeader("access-control-allow-methods", "GET, PUT, POST, OPTIONS");
+  response.setHeader("access-control-allow-headers", "content-type, x-moribito-user");
+  if (request.method === "OPTIONS") { response.statusCode = 204; return response.end(); }
   const userId = request.headers["x-moribito-user"]?.toString() ?? "local-user";
   if (request.method === "GET" && request.url === "/save") return response.end(JSON.stringify(await service.get(userId)));
   if (request.method === "POST" && request.url === "/save/reset") return response.end(JSON.stringify(await service.reset(userId)));
