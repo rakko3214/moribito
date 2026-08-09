@@ -4,8 +4,13 @@ import type { MapId } from "../world/mapTypes.js";
 import { EventBus } from "./EventBus.js";
 import { createInitialState } from "./initialState.js";
 import { SaveMapper } from "./SaveMapper.js";
+import { EventSystem } from "./systems/EventSystem.js";
+import { InventorySystem } from "./systems/InventorySystem.js";
+import { QuestSystem } from "./systems/QuestSystem.js";
+import { TimeSystem } from "./systems/TimeSystem.js";
 
-type RuntimeEvent = { type: "STATE_LOADED" } | { type: "PLAYER_CHANGED" };
+type RuntimeDomain = "time" | "inventory" | "quests" | "events";
+type RuntimeEvent = { type: "STATE_LOADED" } | { type: "PLAYER_CHANGED" } | { type: "STATE_CHANGED"; domain: RuntimeDomain };
 
 export class GameRuntime {
   private state = createInitialState();
@@ -15,6 +20,10 @@ export class GameRuntime {
   private mutationVersion = 0;
   private savingVersion = 0;
   readonly events = new EventBus<RuntimeEvent>();
+  readonly time = new TimeSystem(() => this.state, (domain) => this.domainChanged(domain));
+  readonly inventory = new InventorySystem(() => this.state, (domain) => this.domainChanged(domain));
+  readonly quests = new QuestSystem(() => this.state, (domain) => this.domainChanged(domain));
+  readonly eventSystem = new EventSystem(() => this.state, (domain) => this.domainChanged(domain));
 
   constructor(private readonly bridge: GameBridge) {
     bridge.onGame((event) => {
@@ -27,6 +36,7 @@ export class GameRuntime {
   }
 
   getState() { return this.state; }
+  update(deltaMs: number) { this.time.update(deltaMs); }
   updatePlayer(mapId: MapId, x: number, y: number, direction?: SaveDataV1["player"]["direction"]) {
     const player = this.state.player;
     if (player.mapId === mapId && Math.abs(player.x - x) < 0.5 && Math.abs(player.y - y) < 0.5 && (!direction || player.direction === direction)) return;
@@ -58,6 +68,10 @@ export class GameRuntime {
     if (this.dirty) return;
     this.dirty = true;
     this.bridge.toReact({ type: "SAVE_STATE_CHANGED", payload: { status: "dirty" } });
+  }
+  private domainChanged(domain: RuntimeDomain) {
+    this.markDirty();
+    this.events.emit({ type: "STATE_CHANGED", domain });
   }
   private saveCompleted(revision: number, savedAt: string) {
     this.state.revision = revision;

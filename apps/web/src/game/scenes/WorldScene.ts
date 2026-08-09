@@ -15,6 +15,7 @@ export class WorldScene extends Phaser.Scene {
   private colliders: Phaser.Physics.Arcade.Collider[] = [];
   private transitionLocked = false;
   private locationLabel!: Phaser.GameObjects.Text;
+  private timeLabel!: Phaser.GameObjects.Text;
 
   constructor(private readonly bridge: GameBridge, private readonly runtime: GameRuntime) { super("WorldScene"); }
   preload() {
@@ -28,17 +29,23 @@ export class WorldScene extends Phaser.Scene {
     this.player.setCircle(13, 5, 9).setCollideWorldBounds(true);
     this.fieldInput = new FieldInput(this);
     this.locationLabel = this.add.text(16, 14, "", { fontFamily: "'Yu Gothic', sans-serif", fontSize: "16px", color: "#f5f0dc", backgroundColor: "#102019dd", padding: { x: 10, y: 7 } }).setScrollFactor(0).setDepth(100);
+    this.timeLabel = this.add.text(this.scale.width - 16, 14, "", { fontFamily: "'Yu Gothic', sans-serif", fontSize: "14px", color: "#f5f0dc", backgroundColor: "#102019dd", padding: { x: 10, y: 7 } }).setOrigin(1, 0).setScrollFactor(0).setDepth(100);
     this.add.text(16, 54, "移動: WASD / 矢印キー / 画面をドラッグ", { fontFamily: "'Yu Gothic', sans-serif", fontSize: "12px", color: "#d5dfc7", backgroundColor: "#102019bb", padding: { x: 8, y: 5 } }).setScrollFactor(0).setDepth(100);
     const state = this.runtime.getState();
     this.changeMap(state.player.mapId as MapId, undefined, { x: state.player.x, y: state.player.y });
     this.runtime.events.on((event) => {
-      if (event.type !== "STATE_LOADED") return;
-      const loaded = this.runtime.getState().player;
-      this.changeMap(loaded.mapId as MapId, undefined, { x: loaded.x, y: loaded.y });
+      if (event.type === "STATE_LOADED") {
+        const loaded = this.runtime.getState().player;
+        this.changeMap(loaded.mapId as MapId, undefined, { x: loaded.x, y: loaded.y });
+      }
+      if (event.type === "STATE_LOADED" || (event.type === "STATE_CHANGED" && event.domain === "time")) this.refreshTimeLabel();
     });
+    this.scale.on("resize", (size: Phaser.Structs.Size) => this.timeLabel.setX(size.width - 16));
+    this.refreshTimeLabel();
     this.bridge.toReact({ type: "GAME_READY" });
   }
-  update() {
+  update(_time: number, delta: number) {
+    this.runtime.update(delta);
     const direction = this.fieldInput.getDirection();
     this.player.setVelocity(direction.x * PLAYER_SPEED, direction.y * PLAYER_SPEED);
     if (direction.x !== 0) this.player.setFlipX(direction.x < 0);
@@ -47,6 +54,14 @@ export class WorldScene extends Phaser.Scene {
     if (!this.map || this.transitionLocked) return;
     const transition = this.map.transitions.find((area) => Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(area.x, area.y, area.width, area.height), this.player.x, this.player.y));
     if (transition) this.changeMap(transition.targetMap, transition.targetSpawn);
+  }
+  private refreshTimeLabel() {
+    const time = this.runtime.getState().time;
+    const season = ({ spring: "春", summer: "夏", autumn: "秋", winter: "冬" } as Record<string, string>)[time.season] ?? time.season;
+    const displayMinutes = Math.floor(time.minutes / 5) * 5;
+    const hours = Math.floor(displayMinutes / 60).toString().padStart(2, "0");
+    const minutes = (displayMinutes % 60).toString().padStart(2, "0");
+    this.timeLabel.setText(`${season} ${time.day}日  ${hours}:${minutes}`);
   }
   private changeMap(id: MapId, spawnName?: string, exactSpawn?: { x: number; y: number }) {
     this.transitionLocked = true;
