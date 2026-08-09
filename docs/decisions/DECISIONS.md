@@ -21,6 +21,14 @@ Last updated: 2026-08-09
 - カメラは主人公追従を基本とし、自由操作は採用しない。イベント時のみ一時的な移動・ズームを許可する。
 - HUDは状態別に切り替え、スマートフォンとPCで情報量を共通にして配置のみ最適化する。
 - スマートフォンではマルチタッチ、PCではキーボード・マウスへ対応し、Input Contextで入力競合を防ぐ。
+- PhaserはBoot、Preload、単一World、mode切替型Minigame、TransitionのScene構成とし、マップごとのSceneを作らない。
+- 探索、通常戦闘、ボス戦は原則として同一WorldScene上で行い、CombatSystemでModeを切り替える。
+- Sceneを越える状態とゲームルールはGameRuntime、GameState、Systemへ分離する。
+- Runtime GameStateとSaveDataをSaveMapperで分離し、SaveDataにversionを持たせてMigration可能にする。
+- コンテンツJSONのIDは英小文字・snake_case・種類prefixとし、Zodで型・重複・参照を検証する。
+- EventとQuestを分離し、ConditionとActionによるデータ駆動を基本とする。JSON内へ任意Scriptを記述しない。
+- PhaserからAPIへ直接アクセスせず、GameBridgeとReact / SaveServiceを介して保存する。
+- アセットをCore、Area、Optionalの3段階でロードし、エラーをRecoverable、Warning、Fatalに分類する。
 
 - ストーリー重視の和風生活ファンタジーRPGとする。
 - スマートフォン向け、Android・iPhone対応とし、スマートフォンでは縦画面を基本とする。

@@ -8,12 +8,9 @@ Last updated: 2026-08-09
 ### First Playable技術基盤
 
 - 9:16系を前提としたスマートフォンの基準論理解像度と、実機検証後の最終値
-- React・Phaser間のGameBridgeイベント名、payload、応答、エラー型
-- Phaser Sceneの最終構成、Scene間状態、ローディング境界
-- JSONデータの形式、ID規則、スキーマ検証
 - Google認証とユーザーIDの実装方式
 - AWSを採用するか。採用時のCognito、API Gateway、Lambda、DynamoDB構成
-- セーブデータ構造、オートセーブ、手動セーブ、セーブスロット
+- SaveData各セクションの詳細、オートセーブ、手動セーブ、セーブスロット
 - クライアントとサーバーの責務
 - 通信失敗、データ競合、不正データへの対応
 - ゲストプレイを実装するか

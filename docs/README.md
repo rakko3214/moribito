@@ -69,6 +69,7 @@ Last updated: 2026-08-09
 - [`technical/ENGINE_DECISION.md`](technical/ENGINE_DECISION.md)
 - [`technical/TECH_STACK.md`](technical/TECH_STACK.md)
 - [`technical/DISPLAY_INPUT_FOUNDATION.md`](technical/DISPLAY_INPUT_FOUNDATION.md)
+- [`technical/CLIENT_ARCHITECTURE.md`](technical/CLIENT_ARCHITECTURE.md)
 
 ## 更新ルール
 

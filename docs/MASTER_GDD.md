@@ -42,7 +42,7 @@ Last updated: 2026-08-09
 - 非戦闘時は対象付近の長押しで会話・採取・調査
 - 戦闘はフィールド上のシームレス・セミオートアクション方式
 
-First PlayableはTypeScript、React、Vite、Phaser、Tiledを使用して実装する。ゲーム本体はPhaser、Webアプリケーションの外側はReactが担当する。詳細は [`technical/TECH_STACK.md`](technical/TECH_STACK.md) を参照。
+First PlayableはTypeScript、React、Vite、Phaser、Tiledを使用して実装する。ゲーム本体はPhaser、Webアプリケーションの外側はReactが担当する。通常フィールドと戦闘は単一WorldSceneを中心に構成し、状態とゲームルールをGameRuntime、GameState、各Systemへ分離する。詳細は [`technical/TECH_STACK.md`](technical/TECH_STACK.md) と [`technical/CLIENT_ARCHITECTURE.md`](technical/CLIENT_ARCHITECTURE.md) を参照。
 
 ## 3. コアゲームループ
 

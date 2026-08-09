@@ -178,22 +178,11 @@ assets/
 
 実際のプロジェクト構造へ合わせて調整できるが、画像、音声、マップ、ゲームデータ、プログラムを分離する。
 
-## Phaser Scene方針
+## クライアント内部構成
 
-初期候補：
+`BootScene`、`PreloadScene`、単一の `WorldScene`、mode切替型の `MinigameScene`、`TransitionScene` を採用する。マップごとのSceneは作らず、探索・通常戦・ボス戦は原則 `WorldScene + CombatSystem` で扱う。
 
-- `BootScene`
-- `PreloadScene`
-- `BaseWorldScene`
-- `VillageScene`
-- `HomeScene`
-- `ShrineScene`
-- `ForestScene`
-- `CookingScene`
-- `FishingScene`
-- `TransitionScene`
-
-戦闘はすべてを独立した `BattleScene` へ移動する方式に固定しない。詳細なScene構成、Scene間状態、ローディング境界は内部構造設計で確定する。
+ゲーム状態とルールはSceneから `GameRuntime`、`GameState`、各Systemへ分離する。JSONはZodで検証し、Event / QuestはConditionとActionによるデータ駆動を基本とする。詳細は [`CLIENT_ARCHITECTURE.md`](CLIENT_ARCHITECTURE.md) を参照する。
 
 ## パフォーマンス
 
@@ -240,6 +229,6 @@ AWSの採用、各サービスの設定、認証、セーブ、通信失敗、�
 
 ## 次の設計ブロック
 
-- Phaser Scene構成とScene間の状態・ローディング境界
-- GameBridgeイベント、payload、TypeScript型、エラー処理
-- JSONデータ構造、ID規則、スキーマ検証、セーブデータ境界
+- Google認証、ユーザー識別、API境界
+- AWSサーバーレス構成とユーザー別クラウド保存
+- 手動・自動セーブ、通信断、競合、破損時の復旧
