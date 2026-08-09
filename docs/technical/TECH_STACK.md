@@ -216,19 +216,18 @@ Phaser起動
 ゲーム開始
 ```
 
-## AWS構成候補
+## AWSバックエンド
 
-現段階の候補：
+First Playableでは次を採用する。
 
 - Amazon S3 + CloudFront：静的Web配信
-- Amazon Cognito + Google Login：認証
-- Amazon API Gateway + Lambda：セーブAPI
+- Amazon Cognito User Pool + Google Social Login：認証
+- Amazon API Gateway HTTP API + JWT Authorizer：API認証
+- AWS Lambda（TypeScript）：セーブAPI
 - Amazon DynamoDB：ユーザー別セーブ
 
-AWSの採用、各サービスの設定、認証、セーブ、通信失敗、データ競合は後続ブロックで正式確定する。常時起動するEC2やECSは現時点の第一候補にしない。
+Identity Poolは使用せず、クライアントからAWSサービスへ直接アクセスさせない。詳細は [`BACKEND_CLOUD_SAVE.md`](BACKEND_CLOUD_SAVE.md) を参照する。常時起動するEC2やECSは採用しない。
 
-## 次の設計ブロック
+## 次の作業
 
-- Google認証、ユーザー識別、API境界
-- AWSサーバーレス構成とユーザー別クラウド保存
-- 手動・自動セーブ、通信断、競合、破損時の復旧
+First Playableの実装計画、プロジェクト初期構成、環境分離、AWSリソースのIaCおよびAPI型定義を具体化する。

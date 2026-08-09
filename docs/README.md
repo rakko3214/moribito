@@ -70,6 +70,7 @@ Last updated: 2026-08-09
 - [`technical/TECH_STACK.md`](technical/TECH_STACK.md)
 - [`technical/DISPLAY_INPUT_FOUNDATION.md`](technical/DISPLAY_INPUT_FOUNDATION.md)
 - [`technical/CLIENT_ARCHITECTURE.md`](technical/CLIENT_ARCHITECTURE.md)
+- [`technical/BACKEND_CLOUD_SAVE.md`](technical/BACKEND_CLOUD_SAVE.md)
 
 ## 更新ルール
 

@@ -120,7 +120,7 @@ GameStateを直接JSON化せず、SaveMapperで保存形式へ変換する。
 GameState → SaveMapper → SaveData → SaveService / API
 ```
 
-SaveDataは `version` と `savedAt` を必須とし、形式変更時はMigrationを通す。保存対象はplayer、world、time、inventory、quests、events、npcs、farming、progressionを基本とする。具体的なセーブタイミング、競合、復旧は次ブロックで確定する。
+SaveDataは `version`、`revision`、`savedAt` を必須とし、形式変更時はMigrationを通す。保存対象はplayer、world、time、inventory、quests、events、npcs、farming、progressionを基本とする。具体的なセーブタイミング、競合、復旧は [`BACKEND_CLOUD_SAVE.md`](BACKEND_CLOUD_SAVE.md) を参照する。
 
 ## コンテンツデータ
 
@@ -213,7 +213,6 @@ PhaserからAPIへ直接アクセスしない。保存は `GameRuntime → SAVE_
 | Warning | 開発ログを出して継続 | 任意SE・画像・データ不足 |
 | Fatal | `GAME_ERROR` を送りReactで停止画面 | 必須Map不在、必須JSON不正、復旧不能なSave破損、初期化失敗 |
 
-## 次の設計ブロック
+## バックエンドとの境界
 
-Googleログイン、ユーザー識別、API・AWSサーバーレス構成、ユーザー別クラウド保存、手動・自動セーブ、通信断・再試行、競合、ロード失敗およびSaveData復旧を確定する。
-
+Googleログイン、ユーザー識別、API・AWS構成、ユーザー別クラウド保存、手動・自動セーブ、通信断・再試行、競合および復旧は [`BACKEND_CLOUD_SAVE.md`](BACKEND_CLOUD_SAVE.md) を参照する。

@@ -8,12 +8,9 @@ Last updated: 2026-08-09
 ### First Playable技術基盤
 
 - 9:16系を前提としたスマートフォンの基準論理解像度と、実機検証後の最終値
-- Google認証とユーザーIDの実装方式
-- AWSを採用するか。採用時のCognito、API Gateway、Lambda、DynamoDB構成
-- SaveData各セクションの詳細、オートセーブ、手動セーブ、セーブスロット
-- クライアントとサーバーの責務
-- 通信失敗、データ競合、不正データへの対応
-- ゲストプレイを実装するか
+- SaveData各セクションのフィールド、上限、Zod SchemaとMigration実装
+- Cognito、API Gateway、Lambda、DynamoDBのIaC・環境分離・監視・コスト上限
+- IndexedDB PendingSaveの暗号化・保持期間・削除条件
 
 ### 時間のバランス数値
 

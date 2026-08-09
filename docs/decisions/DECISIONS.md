@@ -29,6 +29,15 @@ Last updated: 2026-08-09
 - EventとQuestを分離し、ConditionとActionによるデータ駆動を基本とする。JSON内へ任意Scriptを記述しない。
 - PhaserからAPIへ直接アクセスせず、GameBridgeとReact / SaveServiceを介して保存する。
 - アセットをCore、Area、Optionalの3段階でロードし、エラーをRecoverable、Warning、Fatalに分類する。
+- First PlayableはGoogleログインを必須とし、ゲストプレイと複数セーブスロットを実装しない。
+- Cognito User PoolのGoogle Social Loginを採用し、Cognito `sub` をMoribitoのuserIdとする。Identity Poolは使用しない。
+- セーブAPIはAPI Gateway HTTP APIのJWT Authorizer、Lambda（TypeScript）、DynamoDBで構成する。
+- クライアントからAWSへ直接アクセスさせず、userIdをリクエストから信用しない。
+- 正式セーブはクラウドの1ユーザー1データとし、IndexedDBは送信失敗時のPendingSaveだけに使用する。
+- 重要地点とdirty時5分間隔のオートセーブ、保存可能状態での手動セーブを採用し、戦闘途中は保存しない。
+- 保存要求をSaveManagerへ集約し、1・2・4秒の最大3回Retryを行う。
+- revisionによるOptimistic Lockを採用し、競合時は自動マージせずクラウド最新版を正とする。
+- SaveDataは段階Migration可能なversionを持ち、Currentに加えて復旧用Previousを1世代保持する。
 
 - ストーリー重視の和風生活ファンタジーRPGとする。
 - スマートフォン向け、Android・iPhone対応とし、スマートフォンでは縦画面を基本とする。

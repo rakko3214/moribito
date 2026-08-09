@@ -226,10 +226,10 @@ Google認証、ユーザーID、API、保存先の技術構成は次の技術設
 
 ## 技術基盤
 
-First PlayableはTypeScript、React、Vite、Phaser、Tiledを使用し、スマートフォンブラウザを主要対象、PCブラウザを対応対象とする。スマートフォンは縦画面・9:16系を基準とし、PCは横長表示へ対応する。クライアントは単一WorldScene、GameRuntime / GameState、System分割、GameBridge、Zod検証済みJSONを基盤とする。詳細は [`technical/TECH_STACK.md`](technical/TECH_STACK.md)、[`technical/DISPLAY_INPUT_FOUNDATION.md`](technical/DISPLAY_INPUT_FOUNDATION.md)、[`technical/CLIENT_ARCHITECTURE.md`](technical/CLIENT_ARCHITECTURE.md) を参照。
+First PlayableはTypeScript、React、Vite、Phaser、Tiledを使用し、スマートフォンブラウザを主要対象、PCブラウザを対応対象とする。スマートフォンは縦画面・9:16系を基準とし、PCは横長表示へ対応する。クライアントは単一WorldScene、GameRuntime / GameState、System分割、GameBridge、Zod検証済みJSONを基盤とする。認証・保存にはCognito、API Gateway HTTP API、Lambda、DynamoDBを使用し、Googleログイン必須・1ユーザー1クラウドセーブとする。詳細は [`technical/TECH_STACK.md`](technical/TECH_STACK.md)、[`technical/DISPLAY_INPUT_FOUNDATION.md`](technical/DISPLAY_INPUT_FOUNDATION.md)、[`technical/CLIENT_ARCHITECTURE.md`](technical/CLIENT_ARCHITECTURE.md)、[`technical/BACKEND_CLOUD_SAVE.md`](technical/BACKEND_CLOUD_SAVE.md) を参照。
 
 ## 次の設計ブロック
 
-次はGoogle認証、ユーザー識別、API・AWS構成、クラウド保存、手動・自動セーブ、クライアント・サーバー責務、通信失敗、不正データ、競合と復旧を確定する。
+次はFirst Playableの実装計画、プロジェクト初期構成、環境分離、AWSリソースのIaCおよびAPI型定義を具体化する。
 
 以降は第4章以降の設計を先に広げず、第3章までの実装に必要な仕様を優先して決定する。
