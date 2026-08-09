@@ -24,9 +24,10 @@ export class GameRuntime {
   readonly inventory = new InventorySystem(() => this.state, (domain) => this.domainChanged(domain));
   readonly quests = new QuestSystem(() => this.state, (domain) => this.domainChanged(domain));
   readonly eventSystem = new EventSystem(() => this.state, (domain) => this.domainChanged(domain));
+  private readonly unsubscribeBridge: () => void;
 
   constructor(private readonly bridge: GameBridge) {
-    bridge.onGame((event) => {
+    this.unsubscribeBridge = bridge.onGame((event) => {
       if (event.type === "START_NEW_GAME") this.load(createInitialState());
       if (event.type === "LOAD_GAME") this.load(event.payload);
       if (event.type === "REQUEST_SAVE") this.requestSave();
@@ -36,6 +37,7 @@ export class GameRuntime {
   }
 
   getState() { return this.state; }
+  destroy() { this.unsubscribeBridge(); }
   update(deltaMs: number) { this.time.update(deltaMs); }
   updatePlayer(mapId: MapId, x: number, y: number, direction?: SaveDataV1["player"]["direction"]) {
     const player = this.state.player;

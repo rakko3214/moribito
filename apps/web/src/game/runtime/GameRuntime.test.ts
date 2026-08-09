@@ -26,4 +26,15 @@ describe("GameRuntime save loop", () => {
     bridge.toGame({ type: "SAVE_COMPLETED", payload: { revision: 1, savedAt: new Date().toISOString() } });
     expect(statuses.at(-1)).toBe("dirty");
   });
+
+  it("unsubscribes from the bridge when destroyed", () => {
+    const bridge = new GameBridge();
+    const runtime = new GameRuntime(bridge);
+    let saveRequests = 0;
+    bridge.onReact((event) => { if (event.type === "SAVE_REQUEST") saveRequests += 1; });
+    bridge.toGame({ type: "START_NEW_GAME" });
+    runtime.destroy();
+    bridge.toGame({ type: "REQUEST_SAVE" });
+    expect(saveRequests).toBe(0);
+  });
 });

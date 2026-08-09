@@ -14,5 +14,6 @@ export function createGame(parent: HTMLElement, bridge: GameBridge) {
     render: { antialias: false, pixelArt: true },
     scene: [new BootScene(), new WorldScene(bridge, runtime)],
   });
+  game.events.once(Phaser.Core.Events.DESTROY, () => runtime.destroy());
   return game;
 }

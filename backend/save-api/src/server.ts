@@ -1,7 +1,9 @@
 import { createServer } from "node:http";
 import { InMemorySaveRepository } from "./repository/InMemorySaveRepository.js";
+import { FileSaveRepository } from "./repository/FileSaveRepository.js";
 import { SaveService } from "./service.js";
-const service = new SaveService(new InMemorySaveRepository());
+const repository = process.env.SAVE_DATA_PATH ? new FileSaveRepository(process.env.SAVE_DATA_PATH) : new InMemorySaveRepository();
+const service = new SaveService(repository);
 const server = createServer(async (request, response) => {
   response.setHeader("content-type", "application/json; charset=utf-8");
   const origin = request.headers.origin;
@@ -9,6 +11,7 @@ const server = createServer(async (request, response) => {
   response.setHeader("access-control-allow-methods", "GET, PUT, POST, OPTIONS");
   response.setHeader("access-control-allow-headers", "content-type, x-moribito-user");
   if (request.method === "OPTIONS") { response.statusCode = 204; return response.end(); }
+  if (request.method === "GET" && request.url === "/health") return response.end(JSON.stringify({ status: "ok", storage: process.env.SAVE_DATA_PATH ? "file" : "memory" }));
   const userId = request.headers["x-moribito-user"]?.toString() ?? "local-user";
   if (request.method === "GET" && request.url === "/save") return response.end(JSON.stringify(await service.get(userId)));
   if (request.method === "POST" && request.url === "/save/reset") return response.end(JSON.stringify(await service.reset(userId)));

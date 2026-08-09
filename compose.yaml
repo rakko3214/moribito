@@ -24,9 +24,12 @@ services:
     volumes:
       - .:/workspace
       - api_node_modules:/workspace/node_modules
+      - save_data:/data
     environment:
       APP_ENV: local
+      SAVE_DATA_PATH: /data/saves.json
 
 volumes:
   web_node_modules:
   api_node_modules:
+  save_data:
