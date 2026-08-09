@@ -38,6 +38,17 @@ Last updated: 2026-08-09
 - 保存要求をSaveManagerへ集約し、1・2・4秒の最大3回Retryを行う。
 - revisionによるOptimistic Lockを採用し、競合時は自動マージせずクラウド最新版を正とする。
 - SaveDataは段階Migration可能なversionを持ち、Currentに加えて復旧用Previousを1世代保持する。
+- TypeScriptモノレポをnpm workspacesで管理し、`apps/web`、`backend/save-api`、`packages/shared`、`infra/cdk` を基本構成とする。
+- Docker Composeを標準ローカル環境とし、localではMockAuth、LocalSaveService、IndexedDBによりAWSなしで開発可能にする。
+- 環境をlocal、dev、prodに分け、AWSのdevとprodはリソース・認証・データを分離する。
+- AWSリソースはAWS CDK + TypeScriptで管理する。
+- SaveData v1はplayer、world、time、inventory、quests、events、npcs、farming、progressionの9セクションとする。
+- `packages/shared` のZod SchemaをWeb、Lambda、Migration、Testの型とValidationの正とする。
+- Unit、Integration、Backend、E2Eテストを実施し、各生活システムと戦闘をストーリーから独立して検証可能にする。
+- local / dev限定のDeveloper Test Menuと各SystemのSandboxを用意し、prodでは完全に無効化する。
+- CloudWatch、AWS Budgets、API throttling、Lambda Reserved Concurrency、DynamoDB On-DemandとAlarmで監視・コスト上限を設ける。
+- SaveData本文、JWT、認証Token、個人情報をログへ出さない。
+- First PlayableはPhase 0～8の順で実装し、Phase 0「実装基盤構築」から開始する。
 
 - ストーリー重視の和風生活ファンタジーRPGとする。
 - スマートフォン向け、Android・iPhone対応とし、スマートフォンでは縦画面を基本とする。

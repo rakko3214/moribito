@@ -230,4 +230,4 @@ Identity Poolは使用せず、クライアントからAWSサービスへ直接�
 
 ## 次の作業
 
-First Playableの実装計画、プロジェクト初期構成、環境分離、AWSリソースのIaCおよびAPI型定義を具体化する。
+実装基盤とPhase 0～8のロードマップは [`IMPLEMENTATION_FOUNDATION.md`](IMPLEMENTATION_FOUNDATION.md) を正とする。次はPhase 0「実装基盤構築」へ進む。

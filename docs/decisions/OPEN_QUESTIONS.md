@@ -8,8 +8,8 @@ Last updated: 2026-08-09
 ### First Playable技術基盤
 
 - 9:16系を前提としたスマートフォンの基準論理解像度と、実機検証後の最終値
-- SaveData各セクションのフィールド、上限、Zod SchemaとMigration実装
-- Cognito、API Gateway、Lambda、DynamoDBのIaC・環境分離・監視・コスト上限
+- SaveData各フィールドの具体的な上限値と、実装中に判明する追加Schema制約
+- dev / prodの具体的なAWS予算額、Alarm閾値、throttling値、Reserved Concurrency値
 - IndexedDB PendingSaveの暗号化・保持期間・削除条件
 
 ### 時間のバランス数値

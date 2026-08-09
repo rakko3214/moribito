@@ -42,7 +42,7 @@ Last updated: 2026-08-09
 - 非戦闘時は対象付近の長押しで会話・採取・調査
 - 戦闘はフィールド上のシームレス・セミオートアクション方式
 
-First PlayableはTypeScript、React、Vite、Phaser、Tiledを使用して実装する。ゲーム本体はPhaser、Webアプリケーションの外側はReactが担当する。通常フィールドと戦闘は単一WorldSceneを中心に構成し、状態とゲームルールをGameRuntime、GameState、各Systemへ分離する。GoogleログインとAWS上のユーザー別クラウドセーブを必須とする。詳細は [`technical/TECH_STACK.md`](technical/TECH_STACK.md)、[`technical/CLIENT_ARCHITECTURE.md`](technical/CLIENT_ARCHITECTURE.md)、[`technical/BACKEND_CLOUD_SAVE.md`](technical/BACKEND_CLOUD_SAVE.md) を参照。
+First PlayableはTypeScript、React、Vite、Phaser、Tiledを使用して実装する。ゲーム本体はPhaser、Webアプリケーションの外側はReactが担当する。通常フィールドと戦闘は単一WorldSceneを中心に構成し、状態とゲームルールをGameRuntime、GameState、各Systemへ分離する。GoogleログインとAWS上のユーザー別クラウドセーブを必須とする。実装はPhase 0の基盤構築からPhase 8の統合・調整まで段階的に進める。詳細は [`technical/TECH_STACK.md`](technical/TECH_STACK.md)、[`technical/CLIENT_ARCHITECTURE.md`](technical/CLIENT_ARCHITECTURE.md)、[`technical/BACKEND_CLOUD_SAVE.md`](technical/BACKEND_CLOUD_SAVE.md)、[`technical/IMPLEMENTATION_FOUNDATION.md`](technical/IMPLEMENTATION_FOUNDATION.md) を参照。
 
 ## 3. コアゲームループ
 

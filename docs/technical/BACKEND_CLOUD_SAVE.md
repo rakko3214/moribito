@@ -181,3 +181,6 @@ Resetは単純DELETEを中心にせず、旧Currentをバックアップ対象�
 | Migration | versionごとの段階Migration |
 | Backup | Previous 1世代 |
 
+## 実装上の参照
+
+モノレポ、Docker Compose、local / dev / prod、AWS CDK、共有Zod Schema、テスト、監視および実装順は [`IMPLEMENTATION_FOUNDATION.md`](IMPLEMENTATION_FOUNDATION.md) を参照する。

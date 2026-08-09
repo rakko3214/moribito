@@ -105,11 +105,9 @@ PCでは横方向、スマートフォンでは縦方向に余剰領域が見え
 
 タイトル、Google認証、アカウント、セーブデータ選択、設定、通信・システムエラー等のWebアプリ側画面を担当する。
 
-両者はGameBridge相当のイベント層を介して連携し、内部オブジェクトを直接操作しない。イベント名、payload、型、エラー処理は次の技術設計ブロックで確定する。
+両者はGameBridge相当のイベント層を介して連携し、内部オブジェクトを直接操作しない。イベント、payload、型、エラー処理は [`CLIENT_ARCHITECTURE.md`](CLIENT_ARCHITECTURE.md) を参照する。
 
-## 次の設計ブロック
+## 関連する実装仕様
 
-- Phaser Scene構成と遷移・ローディング境界
-- GameBridgeイベント、payload、TypeScript型、エラー処理
-- JSONのマスターデータ・ランタイムデータ・セーブデータ境界
-
+- Scene、GameBridge、JSON境界：[`CLIENT_ARCHITECTURE.md`](CLIENT_ARCHITECTURE.md)
+- モノレポ、環境、テスト、実装順：[`IMPLEMENTATION_FOUNDATION.md`](IMPLEMENTATION_FOUNDATION.md)

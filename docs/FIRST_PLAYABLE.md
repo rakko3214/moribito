@@ -85,9 +85,9 @@ First PlayableからGoogleアカウントによる認証を採用し、認証ユ
 
 初期実装ではJSONなどによる単純なセーブ構造を許容する。ただし、将来データを分割できる構造を前提とする。
 
-Google認証、ユーザーID、API、保存先の技術構成は次の技術設計ブロックで確定する。AWSを採用する場合は、Amazon Cognito、API Gateway、Lambda、DynamoDBを組み合わせたサーバーレス構成を第一候補とする。
+Google認証はAmazon Cognito User PoolのGoogle Social Loginを使用し、Cognito `sub` をユーザーIDとする。API Gateway HTTP API、Lambda、DynamoDBによるサーバーレス構成を採用する。
 
-ゲストプレイの採否は未決定とする。
+First PlayableではGoogleログインを必須とし、ゲストプレイと複数セーブスロットは実装しない。詳細は [`technical/BACKEND_CLOUD_SAVE.md`](technical/BACKEND_CLOUD_SAVE.md) を参照。
 
 ## 生活システム
 
@@ -226,10 +226,10 @@ Google認証、ユーザーID、API、保存先の技術構成は次の技術設
 
 ## 技術基盤
 
-First PlayableはTypeScript、React、Vite、Phaser、Tiledを使用し、スマートフォンブラウザを主要対象、PCブラウザを対応対象とする。スマートフォンは縦画面・9:16系を基準とし、PCは横長表示へ対応する。クライアントは単一WorldScene、GameRuntime / GameState、System分割、GameBridge、Zod検証済みJSONを基盤とする。認証・保存にはCognito、API Gateway HTTP API、Lambda、DynamoDBを使用し、Googleログイン必須・1ユーザー1クラウドセーブとする。詳細は [`technical/TECH_STACK.md`](technical/TECH_STACK.md)、[`technical/DISPLAY_INPUT_FOUNDATION.md`](technical/DISPLAY_INPUT_FOUNDATION.md)、[`technical/CLIENT_ARCHITECTURE.md`](technical/CLIENT_ARCHITECTURE.md)、[`technical/BACKEND_CLOUD_SAVE.md`](technical/BACKEND_CLOUD_SAVE.md) を参照。
+First PlayableはTypeScript、React、Vite、Phaser、Tiledを使用し、スマートフォンブラウザを主要対象、PCブラウザを対応対象とする。スマートフォンは縦画面・9:16系を基準とし、PCは横長表示へ対応する。クライアントは単一WorldScene、GameRuntime / GameState、System分割、GameBridge、Zod検証済みJSONを基盤とする。認証・保存にはCognito、API Gateway HTTP API、Lambda、DynamoDBを使用し、Googleログイン必須・1ユーザー1クラウドセーブとする。TypeScriptモノレポ、Docker Compose、CDKおよびPhase 0～8のロードマップに従って実装する。詳細は [`technical/TECH_STACK.md`](technical/TECH_STACK.md)、[`technical/DISPLAY_INPUT_FOUNDATION.md`](technical/DISPLAY_INPUT_FOUNDATION.md)、[`technical/CLIENT_ARCHITECTURE.md`](technical/CLIENT_ARCHITECTURE.md)、[`technical/BACKEND_CLOUD_SAVE.md`](technical/BACKEND_CLOUD_SAVE.md)、[`technical/IMPLEMENTATION_FOUNDATION.md`](technical/IMPLEMENTATION_FOUNDATION.md) を参照。
 
-## 次の設計ブロック
+## 次の作業
 
-次はFirst Playableの実装計画、プロジェクト初期構成、環境分離、AWSリソースのIaCおよびAPI型定義を具体化する。
+Phase 0「実装基盤構築」へ進み、モノレポ、Docker Compose、React / Phaser起動、shared Schema、テスト、CI、CDKの最小構成を実装する。
 
 以降は第4章以降の設計を先に広げず、第3章までの実装に必要な仕様を優先して決定する。
