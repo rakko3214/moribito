@@ -1,13 +1,13 @@
 # 未決定事項・要整理項目
 
 Status: Draft  
-Last updated: 2026-08-07
+Last updated: 2026-08-09
 
 ## 優先度：高
 
 ### First Playable技術基盤
 
-- 画面解像度、アスペクト比、入力方式
+- 9:16系を前提としたスマートフォンの基準論理解像度と、実機検証後の最終値
 - React・Phaser間のGameBridgeイベント名、payload、応答、エラー型
 - Phaser Sceneの最終構成、Scene間状態、ローディング境界
 - JSONデータの形式、ID規則、スキーマ検証

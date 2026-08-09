@@ -1,7 +1,7 @@
 # 結師 ドキュメント索引
 
 Status: Approved  
-Last updated: 2026-08-07
+Last updated: 2026-08-09
 
 ## 最初に読む文書
 
@@ -68,6 +68,7 @@ Last updated: 2026-08-07
 - [`art/ART_DIRECTION.md`](art/ART_DIRECTION.md)
 - [`technical/ENGINE_DECISION.md`](technical/ENGINE_DECISION.md)
 - [`technical/TECH_STACK.md`](technical/TECH_STACK.md)
+- [`technical/DISPLAY_INPUT_FOUNDATION.md`](technical/DISPLAY_INPUT_FOUNDATION.md)
 
 ## 更新ルール
 
