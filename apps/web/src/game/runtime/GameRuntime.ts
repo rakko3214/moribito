@@ -4,6 +4,7 @@ import type { MapId } from "../world/mapTypes.js";
 import { EventBus } from "./EventBus.js";
 import { createInitialState } from "./initialState.js";
 import { SaveMapper } from "./SaveMapper.js";
+import { SaveManager } from "./SaveManager.js";
 import { EventSystem } from "./systems/EventSystem.js";
 import { InventorySystem } from "./systems/InventorySystem.js";
 import { QuestSystem } from "./systems/QuestSystem.js";
@@ -15,16 +16,17 @@ type RuntimeEvent = { type: "STATE_LOADED" } | { type: "PLAYER_CHANGED" } | { ty
 export class GameRuntime {
   private state = createInitialState();
   private readonly mapper = new SaveMapper();
-  private dirty = false;
-  private saving = false;
-  private mutationVersion = 0;
-  private savingVersion = 0;
+  private paused = false;
   readonly events = new EventBus<RuntimeEvent>();
   readonly time = new TimeSystem(() => this.state, (domain) => this.domainChanged(domain));
   readonly inventory = new InventorySystem(() => this.state, (domain) => this.domainChanged(domain));
   readonly quests = new QuestSystem(() => this.state, (domain) => this.domainChanged(domain));
   readonly eventSystem = new EventSystem(() => this.state, (domain) => this.domainChanged(domain));
   private readonly unsubscribeBridge: () => void;
+  private readonly saveManager = new SaveManager(
+    () => this.bridge.toReact({ type: "SAVE_REQUEST", payload: this.mapper.toSaveData(this.state) }),
+    (status) => this.bridge.toReact({ type: "SAVE_STATE_CHANGED", payload: { status } }),
+  );
 
   constructor(private readonly bridge: GameBridge) {
     this.unsubscribeBridge = bridge.onGame((event) => {
@@ -33,12 +35,19 @@ export class GameRuntime {
       if (event.type === "REQUEST_SAVE") this.requestSave();
       if (event.type === "SAVE_COMPLETED") this.saveCompleted(event.payload.revision, event.payload.savedAt);
       if (event.type === "SAVE_FAILED") this.saveFailed();
+      if (event.type === "PAUSE_GAME") this.paused = true;
+      if (event.type === "RESUME_GAME") this.paused = false;
     });
   }
 
   getState() { return this.state; }
   destroy() { this.unsubscribeBridge(); }
-  update(deltaMs: number) { this.time.update(deltaMs); }
+  update(deltaMs: number) {
+    if (!this.paused && !this.saveManager.isSaving) this.time.update(deltaMs);
+    this.saveManager.update(deltaMs);
+  }
+  get isPaused() { return this.paused; }
+  setSaveSafe(safe: boolean) { this.saveManager.setSafeToSave(safe); }
   updatePlayer(mapId: MapId, x: number, y: number, direction?: SaveDataV1["player"]["direction"]) {
     const player = this.state.player;
     if (player.mapId === mapId && Math.abs(player.x - x) < 0.5 && Math.abs(player.y - y) < 0.5 && (!direction || player.direction === direction)) return;
@@ -50,26 +59,15 @@ export class GameRuntime {
     this.events.emit({ type: "PLAYER_CHANGED" });
   }
   requestSave() {
-    if (this.saving || !this.dirty) return;
-    this.saving = true;
-    this.savingVersion = this.mutationVersion;
-    this.bridge.toReact({ type: "SAVE_STATE_CHANGED", payload: { status: "saving" } });
-    this.bridge.toReact({ type: "SAVE_REQUEST", payload: this.mapper.toSaveData(this.state) });
+    this.saveManager.request();
   }
   private load(saveData: SaveDataV1) {
     this.state = this.mapper.fromSaveData(saveData);
-    this.dirty = this.state.revision === 0;
-    this.saving = false;
-    this.mutationVersion = 0;
-    this.savingVersion = 0;
-    this.bridge.toReact({ type: "SAVE_STATE_CHANGED", payload: { status: this.dirty ? "dirty" : "saved" } });
+    this.saveManager.load(this.state.revision === 0);
     this.events.emit({ type: "STATE_LOADED" });
   }
   private markDirty() {
-    this.mutationVersion += 1;
-    if (this.dirty) return;
-    this.dirty = true;
-    this.bridge.toReact({ type: "SAVE_STATE_CHANGED", payload: { status: "dirty" } });
+    this.saveManager.markDirty();
   }
   private domainChanged(domain: RuntimeDomain) {
     this.markDirty();
@@ -78,13 +76,9 @@ export class GameRuntime {
   private saveCompleted(revision: number, savedAt: string) {
     this.state.revision = revision;
     this.state.savedAt = savedAt;
-    this.dirty = this.mutationVersion > this.savingVersion;
-    this.saving = false;
-    this.bridge.toReact({ type: "SAVE_STATE_CHANGED", payload: { status: this.dirty ? "dirty" : "saved" } });
+    this.saveManager.completed();
   }
   private saveFailed() {
-    this.saving = false;
-    this.dirty = true;
-    this.bridge.toReact({ type: "SAVE_STATE_CHANGED", payload: { status: "error" } });
+    this.saveManager.failed();
   }
 }

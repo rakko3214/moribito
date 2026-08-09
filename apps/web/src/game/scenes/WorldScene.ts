@@ -46,6 +46,7 @@ export class WorldScene extends Phaser.Scene {
   }
   update(_time: number, delta: number) {
     this.runtime.update(delta);
+    if (this.runtime.isPaused) { this.player.setVelocity(0, 0); return; }
     const direction = this.fieldInput.getDirection();
     this.player.setVelocity(direction.x * PLAYER_SPEED, direction.y * PLAYER_SPEED);
     if (direction.x !== 0) this.player.setFlipX(direction.x < 0);
@@ -53,7 +54,7 @@ export class WorldScene extends Phaser.Scene {
     if (direction.lengthSq() > 0 && this.map) this.runtime.updatePlayer(this.map.id, this.player.x, this.player.y, facing);
     if (!this.map || this.transitionLocked) return;
     const transition = this.map.transitions.find((area) => Phaser.Geom.Rectangle.Contains(new Phaser.Geom.Rectangle(area.x, area.y, area.width, area.height), this.player.x, this.player.y));
-    if (transition) this.changeMap(transition.targetMap, transition.targetSpawn);
+    if (transition) this.changeMap(transition.targetMap, transition.targetSpawn, undefined, true);
   }
   private refreshTimeLabel() {
     const time = this.runtime.getState().time;
@@ -63,7 +64,8 @@ export class WorldScene extends Phaser.Scene {
     const minutes = (displayMinutes % 60).toString().padStart(2, "0");
     this.timeLabel.setText(`${season} ${time.day}日  ${hours}:${minutes}`);
   }
-  private changeMap(id: MapId, spawnName?: string, exactSpawn?: { x: number; y: number }) {
+  private changeMap(id: MapId, spawnName?: string, exactSpawn?: { x: number; y: number }, saveAfterTransition = false) {
+    if (saveAfterTransition) this.runtime.setSaveSafe(false);
     this.transitionLocked = true;
     this.player.setVelocity(0, 0);
     for (const collider of this.colliders) collider.destroy();
@@ -92,7 +94,13 @@ export class WorldScene extends Phaser.Scene {
     this.locationLabel.setText(map.displayName);
     this.runtime.updatePlayer(id, spawn.x, spawn.y);
     this.cameras.main.fadeIn(180, 12, 21, 17);
-    this.time.delayedCall(350, () => { this.transitionLocked = false; });
+    this.time.delayedCall(350, () => {
+      this.transitionLocked = false;
+      if (saveAfterTransition) {
+        this.runtime.setSaveSafe(true);
+        this.runtime.requestSave();
+      }
+    });
   }
   private drawMap(map: LoadedMap) {
     const background = this.add.rectangle(map.width / 2, map.height / 2, map.width, map.height, map.background).setDepth(-20);
