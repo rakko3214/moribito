@@ -3,7 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "scripts": { "dev": "tsx watch src/server.ts", "build": "tsc -p tsconfig.json", "typecheck": "tsc -p tsconfig.json --noEmit", "test": "vitest --exclude dist/**", "test:run": "vitest run --exclude dist/**" },
-  "dependencies": { "@moribito/shared": "0.1.0" },
-  "devDependencies": { "tsx": "4.20.6" }
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest --exclude dist/**",
+    "test:run": "vitest run --exclude dist/**"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.1106.0",
+    "@aws-sdk/lib-dynamodb": "^3.1106.0",
+    "@moribito/shared": "0.1.0"
+  },
+  "devDependencies": {
+    "tsx": "4.20.6"
+  }
 }

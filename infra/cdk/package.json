@@ -3,7 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "scripts": { "build": "tsc -p tsconfig.json", "typecheck": "tsc -p tsconfig.json --noEmit", "synth": "cdk synth -c environment=dev", "deploy:dev": "cdk deploy -c environment=dev", "deploy:prod": "cdk deploy -c environment=prod --require-approval broadening" },
-  "dependencies": { "aws-cdk-lib": "2.263.0", "constructs": "10.5.0" },
-  "devDependencies": { "aws-cdk": "2.1135.1", "tsx": "4.20.6" }
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "synth": "cdk synth -c environment=dev",
+    "deploy:dev": "cdk deploy -c environment=dev",
+    "deploy:prod": "cdk deploy -c environment=prod --require-approval broadening"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "2.263.0",
+    "constructs": "10.5.0"
+  },
+  "devDependencies": {
+    "aws-cdk": "2.1135.1",
+    "esbuild": "^0.28.2",
+    "tsx": "4.20.6"
+  }
 }
