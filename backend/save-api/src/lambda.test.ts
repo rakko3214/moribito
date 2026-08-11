@@ -25,4 +25,14 @@ describe("save Lambda", () => {
     expect(get.statusCode).toBe(200);
     expect(JSON.parse(get.body).data.revision).toBe(1);
   });
+
+  it("resets an existing save before accepting a new game at revision zero", async () => {
+    const handler = createHandler(new SaveService(new InMemorySaveRepository()));
+    await handler({ ...authenticated, routeKey: "PUT /save", body: JSON.stringify({ baseRevision: 0, saveData: save }) });
+    const reset = await handler({ ...authenticated, routeKey: "POST /save/reset" });
+    expect(reset.statusCode).toBe(200);
+    const fresh = await handler({ ...authenticated, routeKey: "PUT /save", body: JSON.stringify({ baseRevision: 0, saveData: save }) });
+    expect(fresh.statusCode).toBe(200);
+    expect(JSON.parse(fresh.body).data.revision).toBe(1);
+  });
 });

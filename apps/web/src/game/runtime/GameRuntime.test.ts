@@ -37,4 +37,52 @@ describe("GameRuntime save loop", () => {
     bridge.toGame({ type: "REQUEST_SAVE" });
     expect(saveRequests).toBe(0);
   });
+
+  it("defers a save during a boss battle until rewards are fully applied", () => {
+    const bridge = new GameBridge(); const runtime = new GameRuntime(bridge); const payloads: Array<ReturnType<GameRuntime["getState"]>> = [];
+    bridge.onReact((event) => { if (event.type === "SAVE_REQUEST") payloads.push(event.payload); });
+    bridge.toGame({ type: "START_NEW_GAME" }); runtime.bakegaeru.start(); bridge.toGame({ type: "REQUEST_SAVE" });
+    expect(payloads).toHaveLength(0);
+    for (let i = 0; i < 12; i += 1) runtime.bakegaeru.attack();
+    runtime.bakegaeru.cleanse();
+    expect(payloads).toHaveLength(1);
+    expect(payloads[0]?.inventory.items).toEqual(expect.arrayContaining([
+      expect.objectContaining({ itemId: "material_purified_water", quantity: 1 }),
+      expect.objectContaining({ itemId: "material_yuishi_fragment", quantity: 1 }),
+    ]));
+  });
+
+  it("round-trips a forest save with chapter three progress", () => {
+    const bridge = new GameBridge(); const runtime = new GameRuntime(bridge); let saved: ReturnType<GameRuntime["getState"]> | undefined;
+    bridge.onReact((event) => { if (event.type === "SAVE_REQUEST") saved = event.payload; });
+    bridge.toGame({ type: "START_NEW_GAME" }); runtime.updatePlayer("map_forest", 260, 600, "right");
+    runtime.gathering.collect("map_forest", "clue_1", "clue_yota_footprint"); bridge.toGame({ type: "REQUEST_SAVE" });
+    expect(saved?.player.mapId).toBe("map_forest");
+    const secondBridge = new GameBridge(); const restored = new GameRuntime(secondBridge); secondBridge.toGame({ type: "LOAD_GAME", payload: saved! });
+    expect(restored.getState().player.mapId).toBe("map_forest");
+    expect(restored.getState().world.maps.map_forest?.collectedObjects).toContain("clue_1");
+  });
+
+  it("immediately saves completed story progression", () => {
+    const bridge = new GameBridge();
+    const runtime = new GameRuntime(bridge);
+    const payloads: Array<ReturnType<GameRuntime["getState"]>> = [];
+    bridge.onReact((event) => { if (event.type === "SAVE_REQUEST") payloads.push(event.payload); });
+    bridge.toGame({ type: "START_NEW_GAME" });
+    const state = runtime.getState();
+    state.quests.completedIds.push("chapter2_bakegaeru");
+    state.npcs.states.yota = { friendship: 1, flags: [] };
+    state.events.flags.push("chapter3:visited_forest", "chapter3:kodama_protected_yota", "chapter3:yodomi_tree_cleansed");
+    state.world.maps.map_forest = {
+      collectedObjects: ["clue_1", "clue_2", "clue_3"],
+      openedChests: [],
+      destroyedObjects: [],
+      flags: [],
+    };
+
+    expect(runtime.chapterThree.completeDeparture()).toBe(true);
+    expect(payloads).toHaveLength(1);
+    expect(payloads[0]?.progression).toMatchObject({ chapter: 4, storyStep: "first_playable_complete" });
+    expect(payloads[0]?.quests.completedIds).toContain("chapter3_yodomi_tree");
+  });
 });

@@ -276,5 +276,4 @@ GameRuntime、GameState、GameBridge、Time、Inventory、Event、Quest、SaveMa
 
 Googleログインから開始し、第3章ボス浄化後に善良妖怪が森へ去るところまで、重大な進行不能やセーブ破損なく通しプレイできる。中断・再ログイン・別端末再開でも進行状態が維持される。
 
-次はPhase 0「実装基盤構築」へ進む。Dockerfile、Compose、CDKコード、Zod Schema実装、具体的なテストケースはPhase 0以降にコードとして作成する。
-
+Phase 0～8の機能モックは完了した。現在の実装状況と製品化前の残作業は [`../FIRST_PLAYABLE_STATUS.md`](../FIRST_PLAYABLE_STATUS.md) を参照する。

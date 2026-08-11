@@ -12,6 +12,7 @@ export function createGame(parent: HTMLElement, bridge: GameBridge) {
     scale: { mode: Phaser.Scale.RESIZE, width: "100%", height: "100%" },
     physics: { default: "arcade", arcade: { gravity: { x: 0, y: 0 } } },
     render: { antialias: false, pixelArt: true },
+    audio: { noAudio: true },
     scene: [new BootScene(), new WorldScene(bridge, runtime)],
   });
   game.events.once(Phaser.Core.Events.DESTROY, () => runtime.destroy());

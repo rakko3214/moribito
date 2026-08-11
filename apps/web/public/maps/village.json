@@ -16,15 +16,17 @@
     ]},
     { "id": 2, "name": "spawns", "type": "objectgroup", "visible": true, "opacity": 1, "x": 0, "y": 0, "draworder": "topdown", "objects": [
       { "id": 10, "name": "start", "type": "", "point": true, "x": 640, "y": 650, "width": 0, "height": 0, "rotation": 0, "visible": true },
-      { "id": 11, "name": "from_home", "type": "", "point": true, "x": 400, "y": 820, "width": 0, "height": 0, "rotation": 0, "visible": true },
-      { "id": 12, "name": "from_shrine", "type": "", "point": true, "x": 640, "y": 95, "width": 0, "height": 0, "rotation": 0, "visible": true }
+      { "id": 11, "name": "from_home", "type": "", "point": true, "x": 252, "y": 870, "width": 0, "height": 0, "rotation": 0, "visible": true },
+      { "id": 12, "name": "from_shrine", "type": "", "point": true, "x": 640, "y": 95, "width": 0, "height": 0, "rotation": 0, "visible": true },
+      { "id": 16, "name": "from_forest", "type": "", "point": true, "x": 1180, "y": 490, "width": 0, "height": 0, "rotation": 0, "visible": true }
     ]},
     { "id": 3, "name": "transitions", "type": "objectgroup", "visible": true, "opacity": 1, "x": 0, "y": 0, "draworder": "topdown", "objects": [
       { "id": 13, "name": "home-door", "type": "", "x": 220, "y": 810, "width": 64, "height": 40, "rotation": 0, "visible": true, "properties": [{"name":"targetMap","type":"string","value":"map_home"},{"name":"targetSpawn","type":"string","value":"entrance"}] },
-      { "id": 14, "name": "shrine-path", "type": "", "x": 590, "y": 32, "width": 100, "height": 45, "rotation": 0, "visible": true, "properties": [{"name":"targetMap","type":"string","value":"map_shrine"},{"name":"targetSpawn","type":"string","value":"entrance"}] }
+        { "id": 14, "name": "shrine-path", "type": "", "x": 590, "y": 32, "width": 100, "height": 45, "rotation": 0, "visible": true, "properties": [{"name":"targetMap","type":"string","value":"map_shrine"},{"name":"targetSpawn","type":"string","value":"entrance"}] },
+        { "id": 15, "name": "forest-path", "type": "", "x": 1210, "y": 430, "width": 38, "height": 120, "rotation": 0, "visible": true, "properties": [{"name":"targetMap","type":"string","value":"map_forest"},{"name":"targetSpawn","type":"string","value":"entrance"}] }
     ]}
   ],
-  "nextlayerid": 4, "nextobjectid": 15, "orientation": "orthogonal", "renderorder": "right-down",
+  "nextlayerid": 4, "nextobjectid": 17, "orientation": "orthogonal", "renderorder": "right-down",
   "properties": [{"name":"displayName","type":"string","value":"守人村"},{"name":"background","type":"color","value":"#284936"},{"name":"accent","type":"color","value":"#8ba66a"}],
   "tiledversion": "1.11.2", "tileheight": 32, "tilesets": [], "tilewidth": 32, "type": "map", "version": "1.10", "width": 40
 }

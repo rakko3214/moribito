@@ -6,7 +6,7 @@
 
 仕様の入口は [`docs/README.md`](docs/README.md) です。
 
-現在はFirst Playableの実装段階です。正式決定は各文書の `Status: Approved`、検討中の内容は `Status: Draft` として管理します。
+First Playableの機能モックは、第1～3章の通し進行とクラウドセーブ再開まで実装済みです。現在の到達点と製品化前の残作業は [`docs/FIRST_PLAYABLE_STATUS.md`](docs/FIRST_PLAYABLE_STATUS.md) を参照してください。正式決定は各文書の `Status: Approved`、検討中の内容は `Status: Draft` として管理します。
 
 ## ローカル起動
 

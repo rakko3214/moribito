@@ -1,7 +1,7 @@
 import type Phaser from "phaser";
 import type { CollisionArea, LoadedMap, MapId, MapTransition } from "./mapTypes.js";
 
-const MAP_KEYS: Record<MapId, string> = { map_village: "map-village", map_home: "map-home", map_shrine: "map-shrine" };
+const MAP_KEYS: Record<MapId, string> = { map_village: "map-village", map_home: "map-home", map_shrine: "map-shrine", map_forest: "map-forest" };
 
 function property(map: Phaser.Tilemaps.Tilemap, name: string) {
   const properties = Array.isArray(map.properties) ? map.properties as Array<{ name: string; value: unknown }> : [];

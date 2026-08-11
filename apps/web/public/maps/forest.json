@@ -1,0 +1,25 @@
+{
+  "compressionlevel": -1, "height": 24, "infinite": false,
+  "layers": [
+    {"id":1,"name":"collisions","type":"objectgroup","visible":true,"opacity":1,"x":0,"y":0,"draworder":"topdown","objects":[
+      {"id":1,"name":"north","type":"","x":0,"y":0,"width":960,"height":32,"rotation":0,"visible":true},
+      {"id":2,"name":"west-top","type":"","x":0,"y":0,"width":32,"height":320,"rotation":0,"visible":true},
+      {"id":3,"name":"west-bottom","type":"","x":0,"y":448,"width":32,"height":320,"rotation":0,"visible":true},
+      {"id":4,"name":"east","type":"","x":928,"y":0,"width":32,"height":768,"rotation":0,"visible":true},
+      {"id":5,"name":"south","type":"","x":0,"y":736,"width":960,"height":32,"rotation":0,"visible":true},
+      {"id":6,"name":"grove-a","type":"","x":160,"y":100,"width":140,"height":90,"rotation":0,"visible":true},
+      {"id":7,"name":"grove-b","type":"","x":390,"y":300,"width":130,"height":110,"rotation":0,"visible":true},
+      {"id":8,"name":"grove-c","type":"","x":660,"y":120,"width":140,"height":100,"rotation":0,"visible":true}
+    ]},
+    {"id":2,"name":"spawns","type":"objectgroup","visible":true,"opacity":1,"x":0,"y":0,"draworder":"topdown","objects":[
+      {"id":9,"name":"start","type":"","point":true,"x":110,"y":384,"width":0,"height":0,"rotation":0,"visible":true},
+      {"id":10,"name":"entrance","type":"","point":true,"x":90,"y":384,"width":0,"height":0,"rotation":0,"visible":true}
+    ]},
+    {"id":3,"name":"transitions","type":"objectgroup","visible":true,"opacity":1,"x":0,"y":0,"draworder":"topdown","objects":[
+      {"id":11,"name":"village-path","type":"","x":0,"y":320,"width":50,"height":128,"rotation":0,"visible":true,"properties":[{"name":"targetMap","type":"string","value":"map_village"},{"name":"targetSpawn","type":"string","value":"from_forest"}]}
+    ]}
+  ],
+  "nextlayerid":4,"nextobjectid":12,"orientation":"orthogonal","renderorder":"right-down",
+  "properties":[{"name":"displayName","type":"string","value":"迷いの森"},{"name":"background","type":"color","value":"#1d3329"},{"name":"accent","type":"color","value":"#71546f"}],
+  "tiledversion":"1.11.2","tileheight":32,"tilesets":[],"tilewidth":32,"type":"map","version":"1.10","width":30
+}
