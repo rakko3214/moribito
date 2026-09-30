@@ -1,5 +1,7 @@
 # Moribito 複数セッション作業分割
 
+この文書は旧First Playableアプリ `apps/web` 向けの履歴です。本番用アプリ `apps/production` の並行作業には [`../production/SESSIONS.md`](../production/SESSIONS.md) を使用してください。
+
 Status: Ready for use
 Last updated: 2026-09-16
 

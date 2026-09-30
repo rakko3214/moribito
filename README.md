@@ -10,7 +10,7 @@ First Playableの機能モックは、第1～3章の通し進行まで実装済�
 
 ## 本番用アプリの再構築
 
-現行のFirst Playableはタグ `prototype-first-playable-2026-09-30` とブランチ `codex/archive-first-playable` に保存しました。本番用アプリは `apps/production` で段階的に実装します。作業の順序と引き継ぎ状態は [`docs/production/PLAN.md`](docs/production/PLAN.md) と [`docs/production/STATUS.md`](docs/production/STATUS.md) を参照してください。
+現行のFirst Playableはタグ `prototype-first-playable-2026-09-30` とブランチ `codex/archive-first-playable` に保存しました。本番用アプリは `apps/production` で段階的に実装します。作業の順序と引き継ぎ状態は [`docs/production/PLAN.md`](docs/production/PLAN.md) と [`docs/production/STATUS.md`](docs/production/STATUS.md)、別セッションへの分担は [`docs/production/SESSIONS.md`](docs/production/SESSIONS.md) を参照してください。
 
 ```bash
 npm run dev:production
