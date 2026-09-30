@@ -1,0 +1,96 @@
+{
+  "compressionlevel": -1,
+  "height": 20,
+  "infinite": false,
+  "layers": [
+    {
+      "id": 1,
+      "name": "collisions",
+      "type": "objectgroup",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "draworder": "topdown",
+      "objects": [
+        {"id": 1, "name": "north-left", "type": "", "x": 0, "y": 0, "width": 600, "height": 32, "rotation": 0, "visible": true},
+        {"id": 2, "name": "north-right", "type": "", "x": 700, "y": 0, "width": 100, "height": 32, "rotation": 0, "visible": true},
+        {"id": 3, "name": "west", "type": "", "x": 0, "y": 0, "width": 32, "height": 640, "rotation": 0, "visible": true},
+        {"id": 4, "name": "east", "type": "", "x": 768, "y": 0, "width": 32, "height": 640, "rotation": 0, "visible": true},
+        {"id": 5, "name": "south", "type": "", "x": 0, "y": 608, "width": 800, "height": 32, "rotation": 0, "visible": true},
+        {"id": 6, "name": "house-left", "type": "", "x": 260, "y": 70, "width": 105, "height": 190, "rotation": 0, "visible": true},
+        {"id": 7, "name": "house-right", "type": "", "x": 435, "y": 70, "width": 105, "height": 190, "rotation": 0, "visible": true},
+        {"id": 8, "name": "house-top", "type": "", "x": 365, "y": 70, "width": 70, "height": 150, "rotation": 0, "visible": true},
+        {"id": 9, "name": "pond", "type": "", "x": 620, "y": 395, "width": 100, "height": 90, "rotation": 0, "visible": true}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "spawns",
+      "type": "objectgroup",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "draworder": "topdown",
+      "objects": [
+        {"id": 10, "name": "start", "type": "", "point": true, "x": 400, "y": 360, "width": 0, "height": 0, "rotation": 0, "visible": true},
+        {"id": 11, "name": "from_home", "type": "", "point": true, "x": 400, "y": 300, "width": 0, "height": 0, "rotation": 0, "visible": true},
+        {"id": 12, "name": "from_village", "type": "", "point": true, "x": 650, "y": 85, "width": 0, "height": 0, "rotation": 0, "visible": true}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "transitions",
+      "type": "objectgroup",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "draworder": "topdown",
+      "objects": [
+        {"id": 13, "name": "home-door", "type": "", "x": 365, "y": 220, "width": 70, "height": 45, "rotation": 0, "visible": true, "properties": [{"name": "targetMap", "type": "string", "value": "map_home"}, {"name": "targetSpawn", "type": "string", "value": "entrance"}]},
+        {"id": 14, "name": "village-path", "type": "", "x": 600, "y": 0, "width": 100, "height": 45, "rotation": 0, "visible": true, "properties": [{"name": "targetMap", "type": "string", "value": "map_village"}, {"name": "targetSpawn", "type": "string", "value": "from_homestead"}]}
+      ]
+    },
+    {
+      "id": 4, "name": "gatheringNodes", "type": "objectgroup", "visible": true, "opacity": 1, "x": 0, "y": 0, "draworder": "topdown",
+      "objects": [
+        {"id":15,"name":"herb_1","type":"gathering","point":true,"x":560,"y":350,"width":0,"height":0,"rotation":0,"visible":true,"properties":[{"name":"itemId","type":"string","value":"item_yomogi"},{"name":"quantity","type":"int","value":1},{"name":"requiredTool","type":"string","value":"tool_hand"},{"name":"color","type":"color","value":"#79a95b"}]},
+        {"id":16,"name":"herb_2","type":"gathering","point":true,"x":600,"y":520,"width":0,"height":0,"rotation":0,"visible":true,"properties":[{"name":"itemId","type":"string","value":"item_yomogi"},{"name":"quantity","type":"int","value":1},{"name":"requiredTool","type":"string","value":"tool_hand"},{"name":"color","type":"color","value":"#79a95b"}]},
+        {"id":17,"name":"wood_1","type":"obstacle","point":true,"x":372,"y":350,"width":0,"height":0,"rotation":0,"visible":true,"properties":[{"name":"itemId","type":"string","value":"item_wood"},{"name":"quantity","type":"int","value":8},{"name":"requiredTool","type":"string","value":"tool_axe"},{"name":"color","type":"color","value":"#6f5238"}]},
+        {"id":18,"name":"wood_2","type":"obstacle","point":true,"x":162,"y":476,"width":0,"height":0,"rotation":0,"visible":true,"properties":[{"name":"itemId","type":"string","value":"item_wood"},{"name":"quantity","type":"int","value":8},{"name":"requiredTool","type":"string","value":"tool_axe"},{"name":"color","type":"color","value":"#6f5238"}]},
+        {"id":19,"name":"stone_1","type":"obstacle","point":true,"x":330,"y":560,"width":0,"height":0,"rotation":0,"visible":true,"properties":[{"name":"itemId","type":"string","value":"item_stone"},{"name":"quantity","type":"int","value":4},{"name":"requiredTool","type":"string","value":"tool_pickaxe"},{"name":"color","type":"color","value":"#899392"}]},
+        {"id":20,"name":"stone_2","type":"obstacle","point":true,"x":246,"y":392,"width":0,"height":0,"rotation":0,"visible":true,"properties":[{"name":"itemId","type":"string","value":"item_stone"},{"name":"quantity","type":"int","value":4},{"name":"requiredTool","type":"string","value":"tool_pickaxe"},{"name":"color","type":"color","value":"#899392"}]}
+      ]
+    },
+    {
+      "id": 5, "name": "interactables", "type": "objectgroup", "visible": true, "opacity": 1, "x": 0, "y": 0, "draworder": "topdown",
+      "objects": [
+        {"id":21,"name":"livestock","type":"station","point":true,"x":520,"y":610,"width":0,"height":0,"rotation":0,"visible":true,"properties":[{"name":"label","type":"string","value":"家畜を世話する"},{"name":"marker","type":"string","value":"飼"},{"name":"color","type":"color","value":"#9b8054"}]}
+      ]
+    },
+    {
+      "id": 6, "name": "eventZones", "type": "objectgroup", "visible": true, "opacity": 1, "x": 0, "y": 0, "draworder": "topdown",
+      "objects": [
+        {"id":22,"name":"farming_tutorial","type":"tutorial","x":95,"y":325,"width":340,"height":250,"rotation":0,"visible":true,"properties":[{"name":"eventId","type":"string","value":"chapter1:farming_tutorial"},{"name":"originX","type":"int","value":120},{"name":"originY","type":"int","value":350},{"name":"columns","type":"int","value":8},{"name":"rows","type":"int","value":6},{"name":"spacing","type":"int","value":42}]}
+      ]
+    }
+  ],
+  "nextlayerid": 7,
+  "nextobjectid": 23,
+  "orientation": "orthogonal",
+  "renderorder": "right-down",
+  "properties": [
+    {"name": "displayName", "type": "string", "value": "祖父の家の敷地"},
+    {"name": "background", "type": "color", "value": "#31533a"},
+    {"name": "accent", "type": "color", "value": "#a99063"}
+  ],
+  "tiledversion": "1.11.2",
+  "tileheight": 32,
+  "tilesets": [],
+  "tilewidth": 32,
+  "type": "map",
+  "version": "1.10",
+  "width": 25
+}
