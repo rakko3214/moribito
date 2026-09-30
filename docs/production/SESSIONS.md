@@ -5,7 +5,7 @@ Last updated: 2026-10-01
 
 ## この文書の位置づけ
 
-対象は `apps/production` の第1～3章Web/PWA先行版。旧 `apps/web` 向けの `docs/testing/PARALLEL_SESSION_PLAN.md` は本番用アプリの担当表として使用しない。仕様と段階は `PLAN.md`、現在の実装状態と次の一手は `STATUS.md` を正とする。
+対象は `apps/production` の第1～3章Web/PWA先行版。旧 `apps/web` 向けの `docs/testing/PARALLEL_SESSION_PLAN.md` は本番用アプリの担当表として使用しない。仕様と段階は `PLAN.md`、現在の実装状態と次の一手は `STATUS.md`、状態と接続の現行契約は `CONTRACT.md` を正とする。
 
 ## 進める順序
 
@@ -25,11 +25,12 @@ Last updated: 2026-10-01
 開始条件を満たすまでは、別セッションにコード変更を任せず、仕様確認や素材調査に限る。
 
 2026-10-01時点では再読込・別タブ競合を実ブラウザで確認し、容量不足・一時的な保存失敗からの再試行は保存層のテストで確認済み。画面非表示イベント単体と容量不足時の画面操作は未確認。
+移動から状態全体の保存までの契約は `CONTRACT.md` に実装済み。生活・複数マップ・戦闘の保存形式と移行は未確定のため、共通契約の開始条件は引き続き未達。
 
 ## 共通ルール
 
 - 1セッションにつき1チャット、1ブランチ、1ワークツリー。同じ作業ディレクトリを複数セッションで編集しない。
-- 開始時に `git status` と基準コミットを確認し、`PLAN.md`、`STATUS.md`、本書を読む。
+- 開始時に `git status` と基準コミットを確認し、`PLAN.md`、`STATUS.md`、`CONTRACT.md`、本書を読む。
 - 担当ファイル以外の変更が必要なら、統合セッションへ接続方法と必要な変更を渡す。共通ファイルを直接変更しない。
 - `package.json`、`package-lock.json`、`apps/production/src/domain/save.ts`、`apps/production/src/persistence/`、`apps/production/src/app/App.tsx`、`apps/production/src/game/mountWorld.ts` は統合セッションが所有する。
 - 旧 `apps/web` は参照専用。旧コードを移す場合は本番側の責務に合わせて実装し、旧セーブキーを使用しない。
@@ -51,7 +52,7 @@ Last updated: 2026-10-01
 
 別セッションには以下の共通文を渡し、担当範囲と基準コミットを追記する。
 
-> 結師の本番用アプリ `apps/production` を担当してください。`docs/production/PLAN.md`、`STATUS.md`、`SESSIONS.md` を読み、指定された基準コミットから専用ワークツリーで作業してください。担当外の共通ファイルと旧 `apps/web` は変更せず、必要な接続差分を統合メモとして報告してください。実装、関連テスト、可能な実画面確認を行い、結果と未解決事項を残してください。
+> 結師の本番用アプリ `apps/production` を担当してください。`docs/production/PLAN.md`、`STATUS.md`、`CONTRACT.md`、`SESSIONS.md` を読み、指定された基準コミットから専用ワークツリーで作業してください。担当外の共通ファイルと旧 `apps/web` は変更せず、必要な接続差分を統合メモとして報告してください。実装、関連テスト、可能な実画面確認を行い、結果と未解決事項を残してください。
 
 ## 統合と定期再開
 

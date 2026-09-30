@@ -1,16 +1,16 @@
 import Phaser from "phaser";
+import type { WorldEvent } from "../domain/gameState.js";
 import type { PlayerPosition } from "../domain/save.js";
 import { canStandAt, HOMESTEAD } from "./homesteadMap.js";
 
 export type Direction = "up" | "down" | "left" | "right";
 export type WorldHandle = {
-  getPlayer(): PlayerPosition;
   setTouchDirection(direction: Direction, pressed: boolean): void;
   setEnabled(enabled: boolean): void;
   destroy(): void;
 };
 
-export function mountWorld(parent: HTMLElement, initial: PlayerPosition, onMove: () => void): WorldHandle {
+export function mountWorld(parent: HTMLElement, initial: PlayerPosition, onEvent: (event: WorldEvent) => void): WorldHandle {
   const touchDirections = new Set<Direction>();
   let enabled = true;
   let playerPosition: PlayerPosition = { ...initial };
@@ -107,10 +107,11 @@ export function mountWorld(parent: HTMLElement, initial: PlayerPosition, onMove:
       const facing = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? "right" : "left") : (dy > 0 ? "down" : "up");
       playerPosition = { ...playerPosition, facing };
       this.avatar.setPosition(playerPosition.x, playerPosition.y);
-      onMove();
+      onEvent({ type: "player.moved", player: snapshotPlayer() });
     }
   }
 
+  const snapshotPlayer = (): PlayerPosition => ({ ...playerPosition, x: Math.round(playerPosition.x * 10) / 10, y: Math.round(playerPosition.y * 10) / 10 });
   const scene = new HomesteadScene();
   const game = new Phaser.Game({
     type: Phaser.AUTO,
@@ -124,7 +125,6 @@ export function mountWorld(parent: HTMLElement, initial: PlayerPosition, onMove:
     scene: [scene],
   });
   return {
-    getPlayer: () => ({ ...playerPosition, x: Math.round(playerPosition.x * 10) / 10, y: Math.round(playerPosition.y * 10) / 10 }),
     setTouchDirection: (direction, pressed) => { if (pressed) touchDirections.add(direction); else touchDirections.delete(direction); },
     setEnabled: (value) => { enabled = value; if (!value) { touchDirections.clear(); scene.clearPointerInput(); } },
     destroy: () => game.destroy(true),

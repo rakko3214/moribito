@@ -1,4 +1,4 @@
-import { createNewSnapshot, SAVE_KEY, saveSchema, type PlayerPosition, type SaveSnapshot } from "../domain/save.js";
+import { createNewSnapshot, SAVE_KEY, saveSchema, type GameState, type SaveSnapshot } from "../domain/save.js";
 
 type SaveStorage = Pick<Storage, "getItem" | "setItem">;
 type SaveLock = Pick<LockManager, "request">;
@@ -40,16 +40,16 @@ export class DeviceSave {
     });
   }
 
-  save(current: SaveSnapshot, player: PlayerPosition): Promise<SaveSnapshot> {
-    return this.withLock(() => this.write(current, player));
+  save(current: SaveSnapshot, state: GameState): Promise<SaveSnapshot> {
+    return this.withLock(() => this.write(current, state));
   }
 
   // pagehide cannot wait for a Web Lock; write synchronously as a last chance.
-  saveBeforeUnload(current: SaveSnapshot, player: PlayerPosition): SaveSnapshot {
-    return this.write(current, player);
+  saveBeforeUnload(current: SaveSnapshot, state: GameState): SaveSnapshot {
+    return this.write(current, state);
   }
 
-  private write(current: SaveSnapshot, player: PlayerPosition): SaveSnapshot {
+  private write(current: SaveSnapshot, state: GameState): SaveSnapshot {
     const stored = this.load();
     if (!stored || stored.saveId !== current.saveId || stored.revision !== current.revision) {
       throw new SaveConflictError();
@@ -58,7 +58,7 @@ export class DeviceSave {
       ...current,
       revision: current.revision + 1,
       savedAt: this.now(),
-      state: { ...current.state, player },
+      state,
     });
     this.writeRaw(next);
     return next;

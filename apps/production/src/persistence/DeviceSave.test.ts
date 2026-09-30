@@ -19,7 +19,7 @@ describe("production device save", () => {
     const saves = new DeviceSave(storage, undefined, () => "2026-09-30T00:00:00.000Z", () => id);
     const started = await saves.startNew();
     expect(started.revision).toBe(0);
-    const moved = await saves.save(started, { ...started.state.player, x: 421, facing: "right" });
+    const moved = await saves.save(started, { ...started.state, player: { ...started.state.player, x: 421, facing: "right" } });
     expect(moved.revision).toBe(1);
     expect(new DeviceSave(storage).load()?.state.player).toMatchObject({ x: 421, facing: "right" });
   });
@@ -30,17 +30,17 @@ describe("production device save", () => {
     storage.setItem(SAVE_KEY, JSON.stringify(oldSave));
     const saves = new DeviceSave(storage, undefined, undefined, () => "a68be7bc-493e-44a8-a53d-f73ce2bc8343");
     await saves.startNew();
-    await expect(saves.save(oldSave, oldSave.state.player)).rejects.toThrow("別のタブ");
+    await expect(saves.save(oldSave, oldSave.state)).rejects.toThrow("別のタブ");
   });
 
   it("writes the latest position synchronously on pagehide and rejects a stale tab", async () => {
     const storage = memoryStorage();
     const saves = new DeviceSave(storage, undefined, () => "2026-09-30T00:00:00.000Z", () => id);
     const started = await saves.startNew();
-    const hidden = saves.saveBeforeUnload(started, { ...started.state.player, x: 432 });
+    const hidden = saves.saveBeforeUnload(started, { ...started.state, player: { ...started.state.player, x: 432 } });
     expect(hidden.revision).toBe(1);
     expect(new DeviceSave(storage).load()?.state.player.x).toBe(432);
-    expect(() => saves.saveBeforeUnload(started, started.state.player)).toThrow(SaveConflictError);
+    expect(() => saves.saveBeforeUnload(started, started.state)).toThrow(SaveConflictError);
     expect(new DeviceSave(storage).load()?.state.player.x).toBe(432);
   });
 
@@ -54,8 +54,8 @@ describe("production device save", () => {
       getItem: () => JSON.stringify(initial),
       setItem: () => { throw new Error("quota"); },
     };
-    await expect(new DeviceSave(storage).save(initial, initial.state.player)).rejects.toThrow(SaveStorageError);
-    expect(() => new DeviceSave(storage).saveBeforeUnload(initial, initial.state.player)).toThrow(SaveStorageError);
+    await expect(new DeviceSave(storage).save(initial, initial.state)).rejects.toThrow(SaveStorageError);
+    expect(() => new DeviceSave(storage).saveBeforeUnload(initial, initial.state)).toThrow(SaveStorageError);
     expect(JSON.parse(storage.getItem()).revision).toBe(0);
   });
 
@@ -71,11 +71,13 @@ describe("production device save", () => {
       },
     };
     const saves = new DeviceSave(storage);
-    await expect(saves.save(started, { ...started.state.player, x: 450 })).rejects.toThrow("再試行してください");
+    const changed = { ...started.state, player: { ...started.state.player, x: 450 }, world: { ...started.state.world, minutes: 450 } };
+    await expect(saves.save(started, changed)).rejects.toThrow("再試行してください");
     expect(JSON.parse(raw).revision).toBe(0);
-    const recovered = await saves.save(started, { ...started.state.player, x: 450 });
+    const recovered = await saves.save(started, changed);
     expect(recovered.revision).toBe(1);
     expect(saves.load()?.state.player.x).toBe(450);
+    expect(saves.load()?.state.world.minutes).toBe(450);
   });
 
   it("reports denied storage access without corrupting the save", () => {

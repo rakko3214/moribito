@@ -27,6 +27,7 @@ export const saveSchema = z.strictObject({
 });
 
 export type SaveSnapshot = z.infer<typeof saveSchema>;
+export type GameState = SaveSnapshot["state"];
 export type PlayerPosition = SaveSnapshot["state"]["player"];
 
 export function createNewSnapshot(saveId: string, savedAt = new Date().toISOString()): SaveSnapshot {

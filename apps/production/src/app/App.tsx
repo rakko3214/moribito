@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { SAVE_KEY, type SaveSnapshot } from "../domain/save.js";
+import { applyWorldEvent } from "../domain/gameState.js";
+import { SAVE_KEY, type GameState, type SaveSnapshot } from "../domain/save.js";
 import type { Direction, WorldHandle } from "../game/mountWorld.js";
 import { DeviceSave, SaveConflictError } from "../persistence/DeviceSave.js";
 
@@ -15,6 +16,7 @@ export function App() {
   const worldHost = useRef<HTMLDivElement>(null);
   const world = useRef<WorldHandle | null>(null);
   const current = useRef<SaveSnapshot | null>(null);
+  const gameState = useRef<GameState | null>(null);
   const movementVersion = useRef(0);
   const isDirty = useRef(false);
   const saving = useRef<Promise<boolean> | null>(null);
@@ -46,10 +48,12 @@ export function App() {
     let disposed = false;
     setGameReady(false);
     const host = worldHost.current;
-    const position = current.current.state.player;
+    const position = gameState.current?.player ?? current.current.state.player;
     void import("../game/mountWorld.js").then(({ mountWorld }) => {
       if (disposed) return;
-      world.current = mountWorld(host, position, () => {
+      world.current = mountWorld(host, position, (event) => {
+        if (!gameState.current) return;
+        gameState.current = applyWorldEvent(gameState.current, event);
         movementVersion.current += 1;
         isDirty.current = true;
         setDirty(true);
@@ -65,6 +69,7 @@ export function App() {
 
   const enterGame = (snapshot: SaveSnapshot) => {
     current.current = snapshot;
+    gameState.current = snapshot.state;
     movementVersion.current = 0;
     isDirty.current = false;
     setDirty(false);
@@ -89,14 +94,14 @@ export function App() {
 
   const saveGame = (): Promise<boolean> => {
     if (saving.current) return saving.current;
-    if (!current.current || !world.current) return Promise.resolve(false);
+    if (!current.current || !gameState.current || !world.current) return Promise.resolve(false);
     const version = movementVersion.current;
     const revision = current.current.revision;
-    const position = world.current.getPlayer();
+    const state = gameState.current;
     setBusy(true);
     setError(null);
     setConflict(false);
-    const task = store.save(current.current, position)
+    const task = store.save(current.current, state)
       .then((snapshot) => {
         if (current.current?.revision !== revision) return true;
         current.current = snapshot;
@@ -127,9 +132,9 @@ export function App() {
       if (document.visibilityState === "hidden" && isDirty.current) void saveGame();
     };
     const onPageHide = () => {
-      if (!isDirty.current || !current.current || !world.current) return;
+      if (!isDirty.current || !current.current || !gameState.current || !world.current) return;
       try {
-        const snapshot = store.saveBeforeUnload(current.current, world.current.getPlayer());
+        const snapshot = store.saveBeforeUnload(current.current, gameState.current);
         current.current = snapshot;
         setSaved(snapshot);
         isDirty.current = false;
