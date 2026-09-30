@@ -1,7 +1,7 @@
 # First Playable 技術スタック・ゲーム基盤
 
 Status: Approved
-Last updated: 2026-08-09
+Last updated: 2026-08-12
 
 ## 目的
 
@@ -230,4 +230,4 @@ Identity Poolは使用せず、クライアントからAWSサービスへ直接�
 
 ## 次の作業
 
-実装基盤とPhase 0～8のロードマップは [`IMPLEMENTATION_FOUNDATION.md`](IMPLEMENTATION_FOUNDATION.md) を正とする。次はPhase 0「実装基盤構築」へ進む。
+実装基盤とPhase 0～8のロードマップは [`IMPLEMENTATION_FOUNDATION.md`](IMPLEMENTATION_FOUNDATION.md) を正とする。機能モック後の正式マップ制作は [`../world/FIRST_PLAYABLE_MAP_PLAN.md`](../world/FIRST_PLAYABLE_MAP_PLAN.md) に従う。

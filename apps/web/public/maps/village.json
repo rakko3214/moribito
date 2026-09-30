@@ -5,28 +5,47 @@
   "layers": [
     { "id": 1, "name": "collisions", "type": "objectgroup", "visible": true, "opacity": 1, "x": 0, "y": 0, "draworder": "topdown", "objects": [
       { "id": 1, "name": "north", "type": "", "x": 0, "y": 0, "width": 1280, "height": 32, "rotation": 0, "visible": true },
-      { "id": 2, "name": "west", "type": "", "x": 0, "y": 0, "width": 32, "height": 960, "rotation": 0, "visible": true },
+      { "id": 2, "name": "west-top", "type": "", "x": 0, "y": 0, "width": 32, "height": 400, "rotation": 0, "visible": true },
+      { "id": 25, "name": "west-bottom", "type": "", "x": 0, "y": 560, "width": 32, "height": 400, "rotation": 0, "visible": true },
       { "id": 3, "name": "east", "type": "", "x": 1248, "y": 0, "width": 32, "height": 960, "rotation": 0, "visible": true },
       { "id": 4, "name": "south-left", "type": "", "x": 0, "y": 928, "width": 560, "height": 32, "rotation": 0, "visible": true },
       { "id": 5, "name": "south-right", "type": "", "x": 720, "y": 928, "width": 560, "height": 32, "rotation": 0, "visible": true },
-      { "id": 6, "name": "home", "type": "", "x": 120, "y": 650, "width": 250, "height": 165, "rotation": 0, "visible": true },
       { "id": 7, "name": "shop", "type": "", "x": 130, "y": 255, "width": 230, "height": 150, "rotation": 0, "visible": true },
       { "id": 8, "name": "teahouse", "type": "", "x": 920, "y": 255, "width": 230, "height": 150, "rotation": 0, "visible": true },
-      { "id": 9, "name": "sacred-tree", "type": "", "x": 550, "y": 120, "width": 180, "height": 150, "rotation": 0, "visible": true }
+      { "id": 9, "name": "sacred-tree", "type": "", "x": 550, "y": 120, "width": 180, "height": 150, "rotation": 0, "visible": true },
+      { "id": 18, "name": "forge", "type": "", "x": 410, "y": 300, "width": 200, "height": 145, "rotation": 0, "visible": true },
+      { "id": 26, "name": "clinic", "type": "", "x": 130, "y": 500, "width": 230, "height": 140, "rotation": 0, "visible": true },
+      { "id": 27, "name": "village-hall", "type": "", "x": 920, "y": 500, "width": 230, "height": 140, "rotation": 0, "visible": true }
     ]},
     { "id": 2, "name": "spawns", "type": "objectgroup", "visible": true, "opacity": 1, "x": 0, "y": 0, "draworder": "topdown", "objects": [
       { "id": 10, "name": "start", "type": "", "point": true, "x": 640, "y": 650, "width": 0, "height": 0, "rotation": 0, "visible": true },
       { "id": 11, "name": "from_home", "type": "", "point": true, "x": 252, "y": 870, "width": 0, "height": 0, "rotation": 0, "visible": true },
       { "id": 12, "name": "from_shrine", "type": "", "point": true, "x": 640, "y": 95, "width": 0, "height": 0, "rotation": 0, "visible": true },
-      { "id": 16, "name": "from_forest", "type": "", "point": true, "x": 1180, "y": 490, "width": 0, "height": 0, "rotation": 0, "visible": true }
+      { "id": 16, "name": "from_forest", "type": "", "point": true, "x": 1180, "y": 490, "width": 0, "height": 0, "rotation": 0, "visible": true },
+      { "id": 17, "name": "from_homestead", "type": "", "point": true, "x": 640, "y": 880, "width": 0, "height": 0, "rotation": 0, "visible": true },
+      { "id": 19, "name": "from_shop", "type": "", "point": true, "x": 245, "y": 445, "width": 0, "height": 0, "rotation": 0, "visible": true },
+      { "id": 20, "name": "from_nagomi", "type": "", "point": true, "x": 1035, "y": 445, "width": 0, "height": 0, "rotation": 0, "visible": true },
+      { "id": 21, "name": "from_forge", "type": "", "point": true, "x": 510, "y": 485, "width": 0, "height": 0, "rotation": 0, "visible": true },
+      { "id": 28, "name": "from_river", "type": "", "point": true, "x": 80, "y": 480, "width": 0, "height": 0, "rotation": 0, "visible": true },
+      { "id": 29, "name": "from_clinic", "type": "", "point": true, "x": 245, "y": 680, "width": 0, "height": 0, "rotation": 0, "visible": true },
+      { "id": 30, "name": "from_village_hall", "type": "", "point": true, "x": 1035, "y": 680, "width": 0, "height": 0, "rotation": 0, "visible": true }
     ]},
     { "id": 3, "name": "transitions", "type": "objectgroup", "visible": true, "opacity": 1, "x": 0, "y": 0, "draworder": "topdown", "objects": [
-      { "id": 13, "name": "home-door", "type": "", "x": 220, "y": 810, "width": 64, "height": 40, "rotation": 0, "visible": true, "properties": [{"name":"targetMap","type":"string","value":"map_home"},{"name":"targetSpawn","type":"string","value":"entrance"}] },
-        { "id": 14, "name": "shrine-path", "type": "", "x": 590, "y": 32, "width": 100, "height": 45, "rotation": 0, "visible": true, "properties": [{"name":"targetMap","type":"string","value":"map_shrine"},{"name":"targetSpawn","type":"string","value":"entrance"}] },
-        { "id": 15, "name": "forest-path", "type": "", "x": 1210, "y": 430, "width": 38, "height": 120, "rotation": 0, "visible": true, "properties": [{"name":"targetMap","type":"string","value":"map_forest"},{"name":"targetSpawn","type":"string","value":"entrance"}] }
+      { "id": 13, "name": "homestead-path", "type": "", "x": 560, "y": 920, "width": 160, "height": 40, "rotation": 0, "visible": true, "properties": [{"name":"targetMap","type":"string","value":"map_homestead"},{"name":"targetSpawn","type":"string","value":"from_village"}] },
+        { "id": 14, "name": "shrine-path", "type": "", "x": 590, "y": 32, "width": 100, "height": 45, "rotation": 0, "visible": true, "properties": [{"name":"targetMap","type":"string","value":"map_shrine_approach"},{"name":"targetSpawn","type":"string","value":"from_village"}] },
+        { "id": 15, "name": "forest-path", "type": "", "x": 1210, "y": 430, "width": 38, "height": 120, "rotation": 0, "visible": true, "properties": [{"name":"targetMap","type":"string","value":"map_forest"},{"name":"targetSpawn","type":"string","value":"entrance"}] },
+        { "id": 22, "name": "shop-door", "type": "", "x": 210, "y": 400, "width": 70, "height": 45, "rotation": 0, "visible": true, "properties": [{"name":"targetMap","type":"string","value":"map_shop"},{"name":"targetSpawn","type":"string","value":"entrance"}] },
+        { "id": 23, "name": "nagomi-door", "type": "", "x": 1000, "y": 400, "width": 70, "height": 45, "rotation": 0, "visible": true, "properties": [{"name":"targetMap","type":"string","value":"map_nagomi"},{"name":"targetSpawn","type":"string","value":"entrance"}] },
+        { "id": 24, "name": "forge-door", "type": "", "x": 475, "y": 440, "width": 70, "height": 45, "rotation": 0, "visible": true, "properties": [{"name":"targetMap","type":"string","value":"map_forge"},{"name":"targetSpawn","type":"string","value":"entrance"}] },
+        { "id": 31, "name": "river-path", "type": "", "x": 0, "y": 400, "width": 45, "height": 160, "rotation": 0, "visible": true, "properties": [{"name":"targetMap","type":"string","value":"map_river"},{"name":"targetSpawn","type":"string","value":"entrance"}] },
+        { "id": 32, "name": "clinic-door", "type": "", "x": 210, "y": 640, "width": 70, "height": 45, "rotation": 0, "visible": true, "properties": [{"name":"targetMap","type":"string","value":"map_clinic"},{"name":"targetSpawn","type":"string","value":"entrance"}] },
+        { "id": 33, "name": "village-hall-door", "type": "", "x": 1000, "y": 640, "width": 70, "height": 45, "rotation": 0, "visible": true, "properties": [{"name":"targetMap","type":"string","value":"map_village_hall"},{"name":"targetSpawn","type":"string","value":"entrance"}] }
+    ]},
+    { "id": 4, "name": "interactables", "type": "objectgroup", "visible": true, "opacity": 1, "x": 0, "y": 0, "draworder": "topdown", "objects": [
+      { "id": 34, "name": "construction", "type": "station", "point": true, "x": 760, "y": 300, "width": 0, "height": 0, "rotation": 0, "visible": true, "properties": [{"name":"label","type":"string","value":"樹へ建築を依頼"},{"name":"marker","type":"string","value":"建"},{"name":"color","type":"color","value":"#8d6748"}] }
     ]}
   ],
-  "nextlayerid": 4, "nextobjectid": 17, "orientation": "orthogonal", "renderorder": "right-down",
+  "nextlayerid": 5, "nextobjectid": 35, "orientation": "orthogonal", "renderorder": "right-down",
   "properties": [{"name":"displayName","type":"string","value":"守人村"},{"name":"background","type":"color","value":"#284936"},{"name":"accent","type":"color","value":"#8ba66a"}],
   "tiledversion": "1.11.2", "tileheight": 32, "tilesets": [], "tilewidth": 32, "type": "map", "version": "1.10", "width": 40
 }

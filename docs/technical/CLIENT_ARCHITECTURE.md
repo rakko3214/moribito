@@ -213,6 +213,8 @@ PhaserからAPIへ直接アクセスしない。保存は `GameRuntime → SAVE_
 | Warning | 開発ログを出して継続 | 任意SE・画像・データ不足 |
 | Fatal | `GAME_ERROR` を送りReactで停止画面 | 必須Map不在、必須JSON不正、復旧不能なSave破損、初期化失敗 |
 
+First PlayableではPhaser Loaderの進捗を `ASSET_LOAD_PROGRESS`、任意画像の失敗を `ASSET_WARNING` としてReactへ通知する。必須Mapのロード失敗時は `GAME_ERROR(fatal)` を送り、WorldSceneの生成を中止する。Fatal画面からMoribito固有のCache StorageとService Worker登録のみ削除して再試行でき、セーブ・設定・他アプリのキャッシュは削除しない。
+
 ## バックエンドとの境界
 
 Googleログイン、ユーザー識別、API・AWS構成、ユーザー別クラウド保存、手動・自動セーブ、通信断・再試行、競合および復旧は [`BACKEND_CLOUD_SAVE.md`](BACKEND_CLOUD_SAVE.md) を参照する。

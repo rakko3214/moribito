@@ -51,7 +51,7 @@ export class ChapterOneProgressionSystem {
     if (!state.events.flags.includes(VISITED_HOME)) return "visit_home";
     if (state.farming.plots.length === 0) return "try_farming";
     if (!Object.values(state.world.maps).some((map) => map.collectedObjects.length > 0)) return "gather_material";
-    if (!state.quests.completedIds.some((id) => id.startsWith("request_"))) return "first_delivery";
+    if (!["request_kaede_daikon", "request_tessai_wood"].some((id) => state.quests.completedIds.includes(id))) return "first_delivery";
     if (!VILLAGE_NPCS.every((id) => (state.npcs.states[id]?.friendship ?? 0) > 0)) return "greet_villagers";
     if (!state.events.flags.includes(VISITED_SHRINE)) return "visit_shrine";
     if (!state.inventory.items.some((item) => item.itemId === "material_purified_fragment" && item.quantity > 0)) return "first_purification";

@@ -6,6 +6,7 @@ Last updated: 2026-07-29
 Related documents:
 
 - [`WORLD_MAP.md`](WORLD_MAP.md)
+- [`FIRST_PLAYABLE_MAP_PLAN.md`](FIRST_PLAYABLE_MAP_PLAN.md)
 - [`../systems/COEXISTENCE.md`](../systems/COEXISTENCE.md)
 
 ## コンセプト

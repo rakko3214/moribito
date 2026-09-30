@@ -25,7 +25,16 @@ export const saveDataV1Schema = z.object({
         collectedObjects: z.array(z.string()),
         openedChests: z.array(z.string()),
         destroyedObjects: z.array(z.string()),
-        flags: z.array(z.string())
+        flags: z.array(z.string()),
+        placedObjects: z.array(z.object({
+          id: z.string().min(1),
+          itemId: z.string().min(1),
+          x: z.number().finite(),
+          y: z.number().finite(),
+          rotation: z.union([z.literal(0), z.literal(90), z.literal(180), z.literal(270)]),
+          label: z.string().max(30).optional(),
+          active: z.boolean().optional()
+        })).optional()
       })
     )
   }),
@@ -64,6 +73,26 @@ export const saveDataV1Schema = z.object({
       })
     )
   }),
+  livestock: z.object({
+    animals: z.array(z.object({
+      id: z.string().min(1),
+      species: z.enum(["chicken", "cow"]),
+      name: z.string().min(1),
+      ageDays: z.number().int().nonnegative(),
+      friendship: z.number().int().min(0).max(100),
+      fedToday: z.boolean(),
+      productReady: z.boolean()
+    }))
+  }).optional(),
+  yokai: z.object({
+    ownedCards: z.array(z.object({
+      id: z.enum(["kappa", "kitsune", "zashiki"]),
+      rank: z.number().int().min(1).max(5),
+      friendship: z.number().int().nonnegative(),
+      upgrade: z.number().int().min(0).max(10)
+    })),
+    equippedCardId: z.enum(["kappa", "kitsune", "zashiki"]).nullable()
+  }).optional(),
   progression: z.object({
     chapter: z.number().int().positive(),
     storyStep: z.string(),
@@ -73,4 +102,3 @@ export const saveDataV1Schema = z.object({
 });
 
 export type SaveDataV1 = z.infer<typeof saveDataV1Schema>;
-

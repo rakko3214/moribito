@@ -1,6 +1,6 @@
 import type { StateAccessor, StateChanged } from "./types.js";
 
-export const NPC_NAMES = { shiki: "志希", kaede: "楓", genzo: "源三", tessai: "鉄斎", kannushi: "神主", yota: "陽太" } as const;
+export const NPC_NAMES = { shiki: "志希", kaede: "楓", genzo: "源三", tessai: "鉄斎", sogen: "宗玄", soichiro: "宗一郎", kannushi: "神主", yota: "陽太" } as const;
 export type NpcId = keyof typeof NPC_NAMES;
 const LINES: Record<NpcId, string[]> = {
   shiki: ["畑仕事は焦らず、一日ずつ続けていこう。", "採れた野菜、今度いっしょに食べようよ。"],
@@ -9,6 +9,8 @@ const LINES: Record<NpcId, string[]> = {
   tessai: ["道具は使う者の心を映す。", "受け継ぐのは道具じゃない。想いだ。"],
   kannushi: ["日々の営みを重ね、神社へ報告してください。", "穢れには近づきすぎぬよう、気をつけるのです。"],
   yota: ["森の入口で、きれいな木の実を見つけたんだ。", "小さな木の子が、ぼくを守ってくれたんだよ。"],
+  sogen: ["無理は禁物ですよ。薬草の扱いなら、お教えしましょう。", "命に、人も妖怪もありません。"],
+  soichiro: ["帰ってきてくれたか。祖父上の家と畑は、君に任せたい。", "村を守ることが、私の務めだ。"],
 };
 
 export class NpcInteractionSystem {

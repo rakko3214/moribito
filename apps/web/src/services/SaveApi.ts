@@ -1,10 +1,12 @@
 import { saveDataV1Schema, type GetSaveResponse, type PutSaveResponse, type SaveDataV1 } from "@moribito/shared";
 import { pendingSaveStore, type PendingSaveStore } from "./PendingSaveStore.js";
+import { LocalSaveCache } from "./LocalSaveCache.js";
 
-function apiBaseUrl() { return `${window.location.protocol}//${window.location.hostname}:3001`; }
+export function saveApiBaseUrl() { return `${window.location.protocol}//${window.location.hostname}:3001`; }
 let saveUserId = "local-user";
 export function setSaveUserId(userId: string) { saveUserId = userId; }
 function authHeaders() { return { "x-moribito-user": saveUserId }; }
+function saveCache() { return new LocalSaveCache(window.localStorage); }
 const wait = (milliseconds: number) => new Promise<void>((resolve) => window.setTimeout(resolve, milliseconds));
 
 export type SaveFailureKind = "conflict" | "rejected";
@@ -27,22 +29,46 @@ export async function withRetry<T>(operation: () => Promise<T>, delays = [1000, 
   throw lastError instanceof Error ? lastError : new Error("Save request failed.");
 }
 
-export type LoadSaveResult = { save: SaveDataV1 | null; pendingConflict: boolean };
+export type LoadSaveResult = { save: SaveDataV1 | null; pendingConflict: boolean; cloudUnavailable?: boolean };
+
+function cachedSaveOrConnectionError(cause: unknown): LoadSaveResult {
+  const cached = saveCache().load(saveUserId);
+  if (cached) return { save: cached, pendingConflict: false, cloudUnavailable: true };
+  throw new Error("クラウドセーブへ接続できません。通信またはAPIの起動状態を確認してください。", { cause });
+}
 
 export async function loadSave(): Promise<LoadSaveResult> {
-  const response = await fetch(`${apiBaseUrl()}/save`, { headers: authHeaders() });
-  if (!response.ok) throw new Error(`Save load failed (${response.status}).`);
+  let response: Response;
+  try {
+    response = await fetch(`${saveApiBaseUrl()}/save`, { headers: authHeaders() });
+  } catch (error) {
+    return cachedSaveOrConnectionError(error);
+  }
+  if (!response.ok) {
+    if (response.status >= 500) return cachedSaveOrConnectionError(new Error(`Save load failed (${response.status}).`));
+    throw new Error(`Save load failed (${response.status}).`);
+  }
   const result = await response.json() as GetSaveResponse;
   if (!result.success) {
-    if (result.error.code === "SAVE_NOT_FOUND") return recoverPendingSave(null, saveUserId);
+    if (result.error.code === "SAVE_NOT_FOUND") {
+      try { return await recoverPendingSave(null, saveUserId); }
+      catch (error) { return cachedSaveOrConnectionError(error); }
+    }
     throw new Error(result.error.message);
   }
-  return recoverPendingSave(saveDataV1Schema.parse(result.data), saveUserId);
+  const cloudSave = saveDataV1Schema.parse(result.data);
+  try {
+    const recovered = await recoverPendingSave(cloudSave, saveUserId);
+    if (recovered.save) saveCache().save(saveUserId, recovered.save);
+    return recovered;
+  } catch (error) {
+    return cachedSaveOrConnectionError(error);
+  }
 }
 
 async function sendSave(saveData: SaveDataV1) {
   return withRetry(async () => {
-    const response = await fetch(`${apiBaseUrl()}/save`, {
+    const response = await fetch(`${saveApiBaseUrl()}/save`, {
       method: "PUT",
       headers: { "content-type": "application/json", ...authHeaders() },
       body: JSON.stringify({ baseRevision: saveData.revision, saveData }),
@@ -76,9 +102,13 @@ export async function putSave(saveData: SaveDataV1) {
   try {
     const result = await sendSave(saveData);
     await pendingSaveStore.clear(saveUserId);
+    saveCache().save(saveUserId, { ...saveData, revision: result.revision, savedAt: result.savedAt });
     return result;
   } catch (error) {
-    if (!(error instanceof SaveRequestError)) await pendingSaveStore.save(saveUserId, saveData);
+    if (!(error instanceof SaveRequestError)) {
+      saveCache().save(saveUserId, saveData);
+      await pendingSaveStore.save(saveUserId, saveData);
+    }
     throw error;
   }
 }
@@ -89,7 +119,7 @@ export function discardPendingSave(userId = saveUserId, store: Pick<PendingSaveS
 
 export async function resetSave() {
   await withRetry(async () => {
-    const response = await fetch(`${apiBaseUrl()}/save/reset`, { method: "POST", headers: authHeaders() });
+    const response = await fetch(`${saveApiBaseUrl()}/save/reset`, { method: "POST", headers: authHeaders() });
     if (!response.ok) {
       if (response.status >= 400 && response.status < 500) throw new SaveRequestError(`Save reset failed (${response.status}).`, "rejected");
       throw new Error(`Save reset failed (${response.status}).`);
@@ -98,4 +128,5 @@ export async function resetSave() {
     if (!result.success) throw new SaveRequestError(result.error?.message ?? "Save reset failed.", "rejected");
   });
   await pendingSaveStore.clear(saveUserId);
+  saveCache().clear(saveUserId);
 }

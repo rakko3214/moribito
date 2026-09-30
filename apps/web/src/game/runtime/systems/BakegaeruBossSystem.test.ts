@@ -10,11 +10,37 @@ function setup() {
 }
 
 describe("BakegaeruBossSystem", () => {
+  it("does not skip a prepared attack by repeated inputs", () => {
+    const { boss } = setup(); boss.start();
+    const attack = boss.prepareNextAttack();
+    expect(boss.attack()).toBe(false);
+    expect(boss.prepareNextAttack()).toBeUndefined();
+    expect(boss.currentAttack).toBe(attack);
+    expect(boss.corruption).toBe(12);
+    expect(boss.resolvePreparedAttack(false, false)).toBe(true);
+    expect(boss.resolvePreparedAttack(false, false)).toBe(false);
+    expect(boss.wards).toBe(3);
+    expect(boss.attack()).toBe(true);
+  });
+  it("resets attack and wards for a retry and grants rewards once", () => {
+    const { boss, inventory } = setup(); boss.start();
+    for (let i = 0; i < 4; i++) { boss.prepareNextAttack(); boss.resolvePreparedAttack(false, false); }
+    expect(boss.status).toBe("defeated");
+    expect(boss.attack()).toBe(false);
+    boss.start();
+    expect(boss.wards).toBe(4); expect(boss.currentAttack).toBeUndefined();
+    for (let i = 0; i < 12; i++) boss.attack();
+    expect(boss.cleanse()).toBe(true);
+    expect(boss.cleanse()).toBe(false);
+    expect(inventory.quantity("material_purified_water")).toBe(1);
+  });
   it("changes attack language across three corruption phases", () => {
     const { boss } = setup(); boss.start();
     expect(boss.phase).toBe(1); expect(boss.prepareNextAttack()?.kind).toBe("normal");
+    boss.resolvePreparedAttack(true, false);
     for (let i = 0; i < 4; i += 1) boss.attack();
     expect(boss.phase).toBe(2); expect(boss.prepareNextAttack()?.kind).toBe("piercing");
+    boss.resolvePreparedAttack(true, false);
     for (let i = 0; i < 4; i += 1) boss.attack();
     expect(boss.phase).toBe(3); expect(boss.prepareNextAttack()?.kind).toBe("ultimate");
   });

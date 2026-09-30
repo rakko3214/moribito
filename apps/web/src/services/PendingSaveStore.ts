@@ -1,4 +1,5 @@
 import { saveDataV1Schema, type SaveDataV1 } from "@moribito/shared";
+import { transactionCommitted } from "./IndexedDbTransaction.js";
 
 export type PendingSave = {
   userId: string;
@@ -22,7 +23,7 @@ export class PendingSaveStore {
     const candidate = value as Partial<PendingSave>;
     if (candidate.userId !== userId || typeof candidate.baseRevision !== "number" || typeof candidate.createdAt !== "string") return null;
     const parsed = saveDataV1Schema.safeParse(candidate.saveData);
-    return parsed.success ? { userId, baseRevision: candidate.baseRevision, createdAt: candidate.createdAt, saveData: parsed.data } : null;
+    return parsed.success && Number.isSafeInteger(candidate.baseRevision) && candidate.baseRevision >= 0 && candidate.baseRevision === parsed.data.revision ? { userId, baseRevision: candidate.baseRevision, createdAt: candidate.createdAt, saveData: parsed.data } : null;
   }
 
   save(userId: string, saveData: SaveDataV1) {
@@ -53,19 +54,20 @@ async function openDatabase() {
 class IndexedDbPendingSaveDriver implements PendingSaveDriver {
   private async store(mode: IDBTransactionMode) {
     const database = await openDatabase();
-    return { database, store: database.transaction(STORE_NAME, mode).objectStore(STORE_NAME) };
+    const transaction = database.transaction(STORE_NAME, mode);
+    return { database, store: transaction.objectStore(STORE_NAME), committed: transactionCommitted(transaction) };
   }
   async get(userId: string) {
-    const { database, store } = await this.store("readonly");
-    try { return await requestResult(store.get(userId)); } finally { database.close(); }
+    const { database, store, committed } = await this.store("readonly");
+    try { const [value] = await Promise.all([requestResult(store.get(userId)), committed]); return value; } finally { database.close(); }
   }
   async put(value: PendingSave) {
-    const { database, store } = await this.store("readwrite");
-    try { await requestResult(store.put(value)); } finally { database.close(); }
+    const { database, store, committed } = await this.store("readwrite");
+    try { await Promise.all([requestResult(store.put(value)), committed]); } finally { database.close(); }
   }
   async delete(userId: string) {
-    const { database, store } = await this.store("readwrite");
-    try { await requestResult(store.delete(userId)); } finally { database.close(); }
+    const { database, store, committed } = await this.store("readwrite");
+    try { await Promise.all([requestResult(store.delete(userId)), committed]); } finally { database.close(); }
   }
 }
 

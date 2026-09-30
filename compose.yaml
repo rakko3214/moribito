@@ -13,6 +13,12 @@ services:
       VITE_APP_ENV: local
       VITE_AUTH_MODE: mock
       VITE_SAVE_MODE: local
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:5173/').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 15s
 
   api:
     build:
@@ -28,6 +34,12 @@ services:
     environment:
       APP_ENV: local
       SAVE_DATA_PATH: /data/saves.json
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3001/health').then(r=>r.json()).then(v=>{if(v.status!=='ok')process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
 
 volumes:
   web_node_modules:

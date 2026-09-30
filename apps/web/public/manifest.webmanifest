@@ -1,0 +1,15 @@
+{
+  "name": "結師 | Moribito",
+  "short_name": "結師",
+  "description": "人と妖怪を、もう一度結ぶ和風生活アクションRPG",
+  "lang": "ja",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0c1511",
+  "theme_color": "#17251f",
+  "icons": [
+    { "src": "/app-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

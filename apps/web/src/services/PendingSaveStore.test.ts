@@ -24,4 +24,9 @@ describe("PendingSaveStore", () => {
     driver.values.set("user-a", { userId: "user-a", baseRevision: 0, createdAt: "now", saveData: {} });
     expect(await store.load("user-a")).toBeNull();
   });
+  it.each([-1, 0.5, Number.NaN, Number.POSITIVE_INFINITY, 2])("rejects a mismatched or invalid base revision %s", async (baseRevision) => {
+    const driver = new MemoryDriver(); const store = new PendingSaveStore(driver);
+    driver.values.set("user-a", { userId: "user-a", baseRevision, createdAt: "now", saveData: createInitialState() });
+    expect(await store.load("user-a")).toBeNull();
+  });
 });

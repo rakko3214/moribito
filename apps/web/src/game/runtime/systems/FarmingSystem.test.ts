@@ -30,4 +30,11 @@ describe("FarmingSystem", () => {
     farming.advanceDay();
     expect(farming.getPlot("farm_1")?.growthStage).toBe(1);
   });
+  it("supports selected crops with different growth periods", () => {
+    const state = createInitialState(); state.inventory.items.push({ itemId: "seed_carrot", quantity: 1 }, { itemId: "seed_pumpkin", quantity: 1 });
+    const inventory = new InventorySystem(() => state, vi.fn()); const farming = new FarmingSystem(() => state, vi.fn(), inventory);
+    farming.act("farm_1"); expect(farming.act("farm_1", "seed_pumpkin")).toBe("plant");
+    for (let day = 1; day < 7; day += 1) { expect(farming.act("farm_1")).toBe("water"); farming.advanceDay(); }
+    expect(farming.act("farm_1")).toBe("harvest"); expect(inventory.quantity("item_pumpkin")).toBe(1); expect(inventory.quantity("seed_carrot")).toBe(1);
+  });
 });

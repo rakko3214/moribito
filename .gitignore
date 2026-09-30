@@ -9,3 +9,4 @@ coverage/
 cdk.out/
 *.tsbuildinfo
 .DS_Store
+.codex-*.log

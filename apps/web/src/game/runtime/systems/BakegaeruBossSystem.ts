@@ -53,7 +53,7 @@ export class BakegaeruBossSystem {
   }
 
   attack() {
-    if (this.statusValue !== "battle") return false;
+    if (this.statusValue !== "battle" || this.preparedAttack) return false;
     const damage = this.phase === 3 && this.fatiguedValue ? 2 : 1;
     this.corruptionValue = Math.max(0, this.corruptionValue - damage);
     this.fatiguedValue = false;
@@ -63,7 +63,7 @@ export class BakegaeruBossSystem {
   }
 
   prepareNextAttack() {
-    if (this.statusValue !== "battle") return undefined;
+    if (this.statusValue !== "battle" || this.preparedAttack) return undefined;
     const attacks = ATTACKS[this.phase];
     this.preparedAttack = attacks[this.attackIndex % attacks.length];
     this.attackIndex += 1;

@@ -25,8 +25,16 @@ import { ChapterTwoProgressionSystem } from "./systems/ChapterTwoProgressionSyst
 import { ChapterThreeProgressionSystem } from "./systems/ChapterThreeProgressionSystem.js";
 import { YodomiTreeBossSystem } from "./systems/YodomiTreeBossSystem.js";
 import { TimeSystem } from "./systems/TimeSystem.js";
+import { StaffStoneSystem } from "./systems/StaffStoneSystem.js";
+import { WorkbenchSystem } from "./systems/WorkbenchSystem.js";
+import { PlacementSystem } from "./systems/PlacementSystem.js";
+import { ConstructionSystem } from "./systems/ConstructionSystem.js";
+import { LivestockSystem } from "./systems/LivestockSystem.js";
+import { PlacedObjectInteractionSystem } from "./systems/PlacedObjectInteractionSystem.js";
+import { SideEventSystem } from "./systems/SideEventSystem.js";
+import { YokaiCardSystem } from "./systems/YokaiCardSystem.js";
 
-type RuntimeDomain = "time" | "inventory" | "quests" | "events" | "farming" | "gathering" | "cooking" | "fishing" | "alchemy" | "shop" | "offering" | "combat" | "progression" | "npcs";
+type RuntimeDomain = "time" | "inventory" | "quests" | "events" | "farming" | "livestock" | "gathering" | "cooking" | "fishing" | "alchemy" | "shop" | "offering" | "combat" | "progression" | "npcs" | "yokai";
 type RuntimeEvent = { type: "STATE_LOADED" } | { type: "PLAYER_CHANGED" } | { type: "STATE_CHANGED"; domain: RuntimeDomain };
 
 export class GameRuntime {
@@ -36,6 +44,12 @@ export class GameRuntime {
   readonly events = new EventBus<RuntimeEvent>();
   readonly time = new TimeSystem(() => this.state, (domain) => this.domainChanged(domain));
   readonly inventory = new InventorySystem(() => this.state, (domain) => this.domainChanged(domain));
+  readonly workbench = new WorkbenchSystem(() => this.state, (domain) => this.domainChanged(domain), this.inventory);
+  readonly placement = new PlacementSystem(() => this.state, (domain) => this.domainChanged(domain), this.inventory);
+  readonly construction = new ConstructionSystem(() => this.state, (domain) => this.domainChanged(domain), this.inventory);
+  readonly livestock = new LivestockSystem(() => this.state, (domain) => this.domainChanged(domain), this.inventory);
+  readonly placedInteractions = new PlacedObjectInteractionSystem(this.placement, this.livestock);
+  readonly staffStones = new StaffStoneSystem(() => this.state, (domain) => this.domainChanged(domain), this.inventory);
   readonly farming = new FarmingSystem(() => this.state, (domain) => this.domainChanged(domain), this.inventory);
   readonly gathering = new GatheringSystem(() => this.state, (domain) => this.domainChanged(domain), this.inventory);
   readonly cooking = new CookingSystem(() => this.state, (domain) => this.domainChanged(domain), this.inventory);
@@ -44,13 +58,15 @@ export class GameRuntime {
   readonly shop = new ShopSystem(() => this.state, (domain) => this.domainChanged(domain), this.inventory);
   readonly offering = new OfferingSystem(() => this.state, (domain) => this.domainChanged(domain), this.inventory);
   readonly combat = new CombatSystem((domain) => this.domainChanged(domain), this.inventory);
+  readonly yokaiCards = new YokaiCardSystem(() => this.state, (domain) => this.domainChanged(domain), this.combat);
   readonly story = new StoryProgressionSystem(() => this.state, (domain) => this.domainChanged(domain));
   readonly npcs = new NpcInteractionSystem(() => this.state, (domain) => this.domainChanged(domain));
   readonly villagerRequests = new VillagerRequestSystem(() => this.state, (domain) => this.domainChanged(domain), this.inventory);
+  readonly sideEvents = new SideEventSystem(() => this.state, (domain) => this.domainChanged(domain), this.inventory);
   readonly chapterOne = new ChapterOneProgressionSystem(() => this.state, (domain) => this.domainChanged(domain));
   readonly bakegaeru = new BakegaeruBossSystem((domain) => this.domainChanged(domain), this.inventory);
   readonly chapterTwo = new ChapterTwoProgressionSystem(() => this.state, (domain) => this.domainChanged(domain));
-  readonly chapterThree = new ChapterThreeProgressionSystem(() => this.state, (domain) => this.domainChanged(domain));
+  readonly chapterThree = new ChapterThreeProgressionSystem(() => this.state, (domain) => this.domainChanged(domain), () => this.offering.isChapterThreeComplete);
   readonly yodomiTree = new YodomiTreeBossSystem((domain) => this.domainChanged(domain), this.inventory);
   private syncingStory = false;
   private loadingState = false;
@@ -76,11 +92,12 @@ export class GameRuntime {
 
   getState() { return this.state; }
   destroy() { this.unsubscribeBridge(); }
-  update(deltaMs: number) {
-    if (!this.paused && !this.saveManager.isSaving) {
+  update(deltaMs: number, worldBlocked = false) {
+    if (!this.paused && !worldBlocked && !this.saveManager.isSaving) {
       this.combat.update(deltaMs);
+      this.yokaiCards.update(deltaMs);
       const advancedDays = this.time.update(deltaMs);
-      for (let day = 0; day < advancedDays; day += 1) { this.farming.advanceDay(); this.gathering.advanceDay(); }
+      for (let day = 0; day < advancedDays; day += 1) { this.farming.advanceDay(); this.gathering.advanceDay(); this.livestock.advanceDay(); }
     }
     this.saveManager.update(deltaMs);
   }
@@ -90,6 +107,7 @@ export class GameRuntime {
     this.time.sleepUntilMorning();
     this.farming.advanceDay();
     this.gathering.advanceDay();
+    this.livestock.advanceDay();
     this.requestSave();
   }
   updatePlayer(mapId: MapId, x: number, y: number, direction?: SaveDataV1["player"]["direction"]) {
@@ -99,6 +117,12 @@ export class GameRuntime {
     player.x = Math.round(x * 10) / 10;
     player.y = Math.round(y * 10) / 10;
     if (direction) player.direction = direction;
+    this.markDirty();
+    this.events.emit({ type: "PLAYER_CHANGED" });
+  }
+  equipTool(toolId: "tool_hoe" | "tool_axe" | "tool_pickaxe" | "tool_watering_can" | "tool_hand") {
+    if (this.state.player.equippedToolId === toolId) return;
+    this.state.player.equippedToolId = toolId;
     this.markDirty();
     this.events.emit({ type: "PLAYER_CHANGED" });
   }
@@ -134,7 +158,30 @@ export class GameRuntime {
       this.state.events.flags.push(gatheringFlag);
       changed = true;
     }
+    const workbenchFlag = "content_workbench_recipes_v1";
+    if (!this.state.events.flags.includes(workbenchFlag)) {
+      for (const recipeId of ["wooden_chair", "livestock_fence", "fence_gate", "wooden_sign"] as const) {
+        const flag = `recipe:workbench:${recipeId}`;
+        if (!this.state.events.flags.includes(flag)) this.state.events.flags.push(flag);
+      }
+      this.state.events.flags.push(workbenchFlag);
+      changed = true;
+    }
     const cookingFlag = "content_phase3_cooking";
+    const movableHomeFlag = "content_home_movable_essentials_v1";
+    if (!this.state.events.flags.includes(movableHomeFlag)) {
+      const home = this.state.world.maps.map_home ??= { collectedObjects: [], openedChests: [], destroyedObjects: [], flags: [], placedObjects: [] };
+      const placed = home.placedObjects ??= [];
+      const inventoryQuantity = (itemId: string) => this.state.inventory.items.find((item) => item.itemId === itemId)?.quantity ?? 0;
+      const ensureEssential = (itemId: string, id: string, x: number, y: number) => {
+        if (!placed.some((item) => item.itemId === itemId) && inventoryQuantity(itemId) === 0) placed.push({ id, itemId, x, y, rotation: 0 });
+      };
+      ensureEssential("furniture_bed", "placed_home_bed", 126, 168);
+      ensureEssential("furniture_workbench", "placed_home_workbench", 336, 168);
+      ensureEssential("furniture_storage_box", "placed_home_storage", 504, 168);
+      this.state.events.flags.push(movableHomeFlag);
+      changed = true;
+    }
     if (!this.state.events.flags.includes(cookingFlag)) {
       const daikon = this.state.inventory.items.find((item) => item.itemId === "item_daikon");
       if (daikon) daikon.quantity += 1;

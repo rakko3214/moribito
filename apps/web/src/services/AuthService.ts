@@ -1,4 +1,10 @@
-export type AuthSession = { userId: string; displayName: string; provider: "mock" | "google" };
+export type AuthSession = { userId: string; displayName: string; provider: "mock" | "google" | "device" };
+/** Device play has no credentials or remote identity. */
+export class DeviceSessionService {
+  restoreSession(): AuthSession { return this.signIn(); }
+  signIn(): AuthSession { return { userId: "local-user", displayName: "端末内プレイ", provider: "device" }; }
+  signOut() { /* Returning to the start screen must not erase the save. */ }
+}
 type SessionStorage = Pick<Storage, "getItem" | "setItem" | "removeItem">;
 const SESSION_KEY = "moribito.auth.session";
 

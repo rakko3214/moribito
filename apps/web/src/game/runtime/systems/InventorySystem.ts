@@ -31,12 +31,13 @@ export class InventorySystem {
     this.changed("inventory"); return true;
   }
   private transfer(from: Array<{ itemId: string; quantity: number }>, to: Array<{ itemId: string; quantity: number }>, itemId: string, quantity: number) {
-    if (!Number.isInteger(quantity) || quantity <= 0) return false;
+    if (!Number.isSafeInteger(quantity) || quantity <= 0) return false;
     const source = from.find((item) => item.itemId === itemId);
     if (!source || source.quantity < quantity) return false;
+    const destination = to.find((item) => item.itemId === itemId);
+    if (!Number.isSafeInteger((destination?.quantity ?? 0) + quantity)) return false;
     source.quantity -= quantity;
     if (source.quantity === 0) from.splice(from.indexOf(source), 1);
-    const destination = to.find((item) => item.itemId === itemId);
     if (destination) destination.quantity += quantity;
     else to.push({ itemId, quantity });
     return true;

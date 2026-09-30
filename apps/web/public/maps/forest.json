@@ -13,11 +13,14 @@
     ]},
     {"id":2,"name":"spawns","type":"objectgroup","visible":true,"opacity":1,"x":0,"y":0,"draworder":"topdown","objects":[
       {"id":9,"name":"start","type":"","point":true,"x":110,"y":384,"width":0,"height":0,"rotation":0,"visible":true},
-      {"id":10,"name":"entrance","type":"","point":true,"x":90,"y":384,"width":0,"height":0,"rotation":0,"visible":true}
+      {"id":10,"name":"entrance","type":"","point":true,"x":90,"y":384,"width":0,"height":0,"rotation":0,"visible":true},
+      {"id":12,"name":"from_depths","type":"","point":true,"x":870,"y":384,"width":0,"height":0,"rotation":0,"visible":true}
     ]},
     {"id":3,"name":"transitions","type":"objectgroup","visible":true,"opacity":1,"x":0,"y":0,"draworder":"topdown","objects":[
-      {"id":11,"name":"village-path","type":"","x":0,"y":320,"width":50,"height":128,"rotation":0,"visible":true,"properties":[{"name":"targetMap","type":"string","value":"map_village"},{"name":"targetSpawn","type":"string","value":"from_forest"}]}
-    ]}
+      {"id":11,"name":"village-path","type":"","x":0,"y":320,"width":50,"height":128,"rotation":0,"visible":true,"properties":[{"name":"targetMap","type":"string","value":"map_village"},{"name":"targetSpawn","type":"string","value":"from_forest"}]},
+      {"id":13,"name":"depths-path","type":"","x":864,"y":320,"width":64,"height":128,"rotation":0,"visible":true,"properties":[{"name":"targetMap","type":"string","value":"map_forest_depths"},{"name":"targetSpawn","type":"string","value":"from_forest"}]}
+    ]},
+    {"id":4,"name":"eventZones","type":"objectgroup","visible":true,"opacity":1,"x":0,"y":0,"draworder":"topdown","objects":[{"id":14,"name":"forest_arrival","type":"chapter","x":70,"y":300,"width":170,"height":168,"rotation":0,"visible":true,"properties":[{"name":"eventId","type":"string","value":"chapter3:forest_arrival"}]}]}
   ],
   "nextlayerid":4,"nextobjectid":12,"orientation":"orthogonal","renderorder":"right-down",
   "properties":[{"name":"displayName","type":"string","value":"迷いの森"},{"name":"background","type":"color","value":"#1d3329"},{"name":"accent","type":"color","value":"#71546f"}],

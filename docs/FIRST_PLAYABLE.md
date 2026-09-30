@@ -1,7 +1,7 @@
 # 第1～3章 First Playable
 
 Status: Approved
-Last updated: 2026-08-09
+Last updated: 2026-08-12
 
 ## 目的
 
@@ -169,6 +169,8 @@ First PlayableではGoogleログインを必須とし、ゲストプレイと複
 
 ## マップ
 
+第1～3章の制作単位、接続関係、配置要件、現行モックとの差分は [`world/FIRST_PLAYABLE_MAP_PLAN.md`](world/FIRST_PLAYABLE_MAP_PLAN.md) を参照する。
+
 第3章までに基本的に移動可能とする。
 
 - 主人公宅、畑
@@ -230,6 +232,6 @@ First PlayableはTypeScript、React、Vite、Phaser、Tiledを使用し、スマ
 
 ## 次の作業
 
-Phase 0「実装基盤構築」へ進み、モノレポ、Docker Compose、React / Phaser起動、shared Schema、テスト、CI、CDKの最小構成を実装する。
+機能モックで確認した章進行を維持しながら、[`world/FIRST_PLAYABLE_MAP_PLAN.md`](world/FIRST_PLAYABLE_MAP_PLAN.md) に従って正式マップへ移行する。地形とイベント配置の確定後に、通常敵の正式配置と戦闘バランスを調整する。
 
 以降は第4章以降の設計を先に広げず、第3章までの実装に必要な仕様を優先して決定する。

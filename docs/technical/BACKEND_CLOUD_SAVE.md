@@ -1,7 +1,7 @@
 # First Playable アカウント・AWSバックエンド・クラウドセーブ仕様
 
 Status: Approved  
-Last updated: 2026-08-09
+Last updated: 2026-09-04
 
 ## 目的
 
@@ -44,6 +44,12 @@ Authorization: Bearer <JWT>
 クライアントはPlayer、Time、Inventory、Quest、Event、NPC、生活、Combat、Progression、WorldState等のゲームロジックを実行する。
 
 サーバーは認証、ユーザー識別、SaveData取得・保存・リセット、versionと必須Schemaの検証、revisionによる競合検出、JSONサイズ等の入力検証、Current / Previous Save管理を担当する。First Playableはサーバー権威型にせず、ゲームルールをLambdaで再計算しない。
+
+## 起動診断
+
+`GET /health` は認証不要で、稼働状態、保存方式、APIバージョン、対応Save Schemaバージョンを返す。クライアントは起動直後、30秒ごと、オンライン復帰時に2.5秒のタイムアウト付きで確認する。API未接続はゲーム全体の停止理由にせず、端末キャッシュで継続し、クラウド保存を保留する。
+
+Docker ComposeではWebとAPIの双方にhealthcheckを設定する。具体的な確認項目は [`../testing/API_HEALTH_QA.md`](../testing/API_HEALTH_QA.md) を参照する。
 
 ## SaveData
 
@@ -131,7 +137,11 @@ Map移動時はdirtyの場合だけ保存する。通常戦、採取、取得、
 
 IndexedDBにはクラウド送信失敗時のPendingSaveだけを一時退避する。DynamoDBを正式データ、IndexedDBを未送信データとする。
 
+加えて、最後にSchema検証を通過したセーブの複製をユーザー別の端末キャッシュへ保持する。これはクラウド/API一時停止中に同じ端末で続きを確認するための読み取り用フォールバックであり、正式セーブや競合解決の正にはしない。端末キャッシュから再開した場合は未保存状態として表示し、その後の保存失敗データをPendingSaveへ退避する。
+
 PendingSaveは `baseRevision` を持つ。次回ログイン時にCloud revisionと一致する場合だけ再送できる。Cloud側が進んでいる場合は自動上書きしない。
+
+プレイ中にブラウザがオフラインからオンラインへ復帰し、状態が未保存または保存失敗なら、現在のGameStateから保存要求を一度自動実行する。競合時は通常と同様に自動上書きしない。
 
 ## 複数端末競合
 
@@ -170,7 +180,7 @@ Resetは単純DELETEを中心にせず、旧Currentをバックアップ対象�
 | Backend | Lambda / TypeScript |
 | Database | DynamoDB |
 | 正式Save | Cloud Current Save |
-| ローカル | IndexedDB PendingSaveのみ |
+| ローカル | IndexedDB PendingSave＋検証済み最終セーブのユーザー別端末キャッシュ |
 | Save Slot | 1ユーザー1データ |
 | Auto Save | 重要時＋dirty時5分間隔 |
 | Manual Save | 採用 |
