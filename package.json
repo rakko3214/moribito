@@ -14,6 +14,8 @@
   ],
   "scripts": {
     "dev": "npm run dev --workspace=@moribito/web",
+    "dev:production": "npm run dev --workspace=@moribito/production",
+    "build:production": "npm run build --workspace=@moribito/production",
     "build": "npm run build --workspaces --if-present",
     "lint": "eslint .",
     "typecheck": "npm run typecheck --workspaces --if-present",
