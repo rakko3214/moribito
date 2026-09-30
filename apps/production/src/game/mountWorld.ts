@@ -24,6 +24,11 @@ export function mountWorld(parent: HTMLElement, initial: PlayerPosition, onMove:
 
     constructor() { super("HomesteadScene"); }
 
+    clearPointerInput() {
+      this.pointerOrigin = null;
+      this.pointerAxis = { x: 0, y: 0 };
+    }
+
     create() {
       const ground = this.add.graphics();
       ground.fillStyle(0x547451).fillRect(0, 0, HOMESTEAD.width, HOMESTEAD.height);
@@ -59,6 +64,7 @@ export function mountWorld(parent: HTMLElement, initial: PlayerPosition, onMove:
       this.cursors = this.input.keyboard?.createCursorKeys();
       this.keys = this.input.keyboard?.addKeys("W,A,S,D") as Record<string, Phaser.Input.Keyboard.Key> | undefined;
       this.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
+        if (!enabled) return;
         this.pointerOrigin = { id: pointer.id, x: pointer.x, y: pointer.y };
       });
       this.input.on("pointermove", (pointer: Phaser.Input.Pointer) => {
@@ -105,6 +111,7 @@ export function mountWorld(parent: HTMLElement, initial: PlayerPosition, onMove:
     }
   }
 
+  const scene = new HomesteadScene();
   const game = new Phaser.Game({
     type: Phaser.AUTO,
     parent,
@@ -114,12 +121,12 @@ export function mountWorld(parent: HTMLElement, initial: PlayerPosition, onMove:
     scale: { mode: Phaser.Scale.RESIZE, width: parent.clientWidth, height: parent.clientHeight },
     render: { pixelArt: true, antialias: false },
     audio: { noAudio: true },
-    scene: [new HomesteadScene()],
+    scene: [scene],
   });
   return {
     getPlayer: () => ({ ...playerPosition, x: Math.round(playerPosition.x * 10) / 10, y: Math.round(playerPosition.y * 10) / 10 }),
     setTouchDirection: (direction, pressed) => { if (pressed) touchDirections.add(direction); else touchDirections.delete(direction); },
-    setEnabled: (value) => { enabled = value; if (!value) touchDirections.clear(); },
+    setEnabled: (value) => { enabled = value; if (!value) { touchDirections.clear(); scene.clearPointerInput(); } },
     destroy: () => game.destroy(true),
   };
 }

@@ -3,6 +3,10 @@ import { createNewSnapshot, SAVE_KEY, saveSchema, type PlayerPosition, type Save
 type SaveStorage = Pick<Storage, "getItem" | "setItem">;
 type SaveLock = Pick<LockManager, "request">;
 
+export class SaveConflictError extends Error {
+  constructor() { super("別のタブで保存が更新されています。保存済みデータを読み込み直してください。"); }
+}
+
 export class DeviceSave {
   constructor(
     private readonly storage: SaveStorage,
@@ -27,20 +31,27 @@ export class DeviceSave {
   }
 
   save(current: SaveSnapshot, player: PlayerPosition): Promise<SaveSnapshot> {
-    return this.withLock(() => {
-      const stored = this.load();
-      if (!stored || stored.saveId !== current.saveId || stored.revision !== current.revision) {
-        throw new Error("別のタブで保存が更新されています。タイトルから読み込み直してください。");
-      }
-      const next = saveSchema.parse({
-        ...current,
-        revision: current.revision + 1,
-        savedAt: this.now(),
-        state: { ...current.state, player },
-      });
-      this.storage.setItem(SAVE_KEY, JSON.stringify(next));
-      return next;
+    return this.withLock(() => this.write(current, player));
+  }
+
+  // pagehide cannot wait for a Web Lock; write synchronously as a last chance.
+  saveBeforeUnload(current: SaveSnapshot, player: PlayerPosition): SaveSnapshot {
+    return this.write(current, player);
+  }
+
+  private write(current: SaveSnapshot, player: PlayerPosition): SaveSnapshot {
+    const stored = this.load();
+    if (!stored || stored.saveId !== current.saveId || stored.revision !== current.revision) {
+      throw new SaveConflictError();
+    }
+    const next = saveSchema.parse({
+      ...current,
+      revision: current.revision + 1,
+      savedAt: this.now(),
+      state: { ...current.state, player },
     });
+    this.storage.setItem(SAVE_KEY, JSON.stringify(next));
+    return next;
   }
 
   private withLock<T>(operation: () => T): Promise<T> {

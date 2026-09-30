@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { SAVE_KEY, type SaveSnapshot } from "../domain/save.js";
 import type { Direction, WorldHandle } from "../game/mountWorld.js";
-import { DeviceSave } from "../persistence/DeviceSave.js";
+import { DeviceSave, SaveConflictError } from "../persistence/DeviceSave.js";
 
 type Screen = "loading" | "title" | "playing";
 const directionLabels = { up: "上", left: "左", down: "下", right: "右" } as const;
@@ -13,6 +13,7 @@ export function App() {
   const world = useRef<WorldHandle | null>(null);
   const current = useRef<SaveSnapshot | null>(null);
   const movementVersion = useRef(0);
+  const isDirty = useRef(false);
   const saving = useRef<Promise<boolean> | null>(null);
   const [screen, setScreen] = useState<Screen>("loading");
   const [saved, setSaved] = useState<SaveSnapshot | null>(null);
@@ -22,6 +23,7 @@ export function App() {
   const [gameReady, setGameReady] = useState(false);
   const [dirty, setDirty] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [conflict, setConflict] = useState(false);
 
   useEffect(() => {
     try {
@@ -45,6 +47,7 @@ export function App() {
       if (disposed) return;
       world.current = mountWorld(host, position, () => {
         movementVersion.current += 1;
+        isDirty.current = true;
         setDirty(true);
       });
       setGameReady(true);
@@ -59,8 +62,10 @@ export function App() {
   const enterGame = (snapshot: SaveSnapshot) => {
     current.current = snapshot;
     movementVersion.current = 0;
+    isDirty.current = false;
     setDirty(false);
     setError(null);
+    setConflict(false);
     setConfirmNew(false);
     setScreen("playing");
   };
@@ -82,17 +87,25 @@ export function App() {
     if (saving.current) return saving.current;
     if (!current.current || !world.current) return Promise.resolve(false);
     const version = movementVersion.current;
+    const revision = current.current.revision;
     const position = world.current.getPlayer();
     setBusy(true);
     setError(null);
+    setConflict(false);
     const task = store.save(current.current, position)
       .then((snapshot) => {
+        if (current.current?.revision !== revision) return true;
         current.current = snapshot;
         setSaved(snapshot);
-        if (movementVersion.current === version) setDirty(false);
+        if (movementVersion.current === version) { isDirty.current = false; setDirty(false); }
         return true;
       })
-      .catch((cause: unknown) => { setError(`保存できません: ${message(cause)}`); return false; })
+      .catch((cause: unknown) => {
+        if (current.current?.revision !== revision) return true;
+        setConflict(cause instanceof SaveConflictError);
+        setError(`保存できません: ${message(cause)}`);
+        return false;
+      })
       .finally(() => { saving.current = null; setBusy(false); });
     saving.current = task;
     return task;
@@ -100,13 +113,39 @@ export function App() {
 
   useEffect(() => {
     if (screen !== "playing") return;
-    const timer = window.setInterval(() => { if (dirty && !saving.current) void saveGame(); }, 30_000);
+    const timer = window.setInterval(() => { if (dirty && !conflict && !saving.current) void saveGame(); }, 30_000);
     return () => window.clearInterval(timer);
-  }, [dirty, screen]);
+  }, [conflict, dirty, screen]);
+
+  useEffect(() => {
+    if (screen !== "playing") return;
+    const onVisibilityChange = () => {
+      if (document.visibilityState === "hidden" && isDirty.current) void saveGame();
+    };
+    const onPageHide = () => {
+      if (!isDirty.current || !current.current || !world.current) return;
+      try {
+        const snapshot = store.saveBeforeUnload(current.current, world.current.getPlayer());
+        current.current = snapshot;
+        setSaved(snapshot);
+        isDirty.current = false;
+        setDirty(false);
+      } catch (cause) {
+        setConflict(cause instanceof SaveConflictError);
+        setError(`保存できません: ${message(cause)}`);
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    window.addEventListener("pagehide", onPageHide);
+    return () => {
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+      window.removeEventListener("pagehide", onPageHide);
+    };
+  }, [screen, store]);
 
   const returnToTitle = async () => {
     world.current?.setEnabled(false);
-    if (!dirty || await saveGame()) setScreen("title");
+    if (!isDirty.current || await saveGame()) setScreen("title");
     else world.current?.setEnabled(true);
   };
 
@@ -144,7 +183,7 @@ export function App() {
       </section>}
 
       {screen === "loading" && <p role="status">読み込み中…</p>}
-      {error && <div className="error-banner" role="alert">{error}</div>}
+      {error && <div className="error-banner" role="alert"><span>{error}{conflict && " 未保存の移動は再読込で失われます。"}</span><div className="error-actions">{screen === "playing" && !conflict && <button type="button" onClick={() => void saveGame()} disabled={busy || !gameReady}>保存を再試行</button>}{conflict && <button type="button" onClick={() => window.location.reload()}>保存済みデータを読み込む</button>}</div></div>}
     </main>
   );
 }

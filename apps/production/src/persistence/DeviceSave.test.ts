@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { createNewSnapshot, SAVE_KEY } from "../domain/save.js";
-import { DeviceSave } from "./DeviceSave.js";
+import { DeviceSave, SaveConflictError } from "./DeviceSave.js";
 
 function memoryStorage(initial: string | null = null) {
   let value = initial;
@@ -33,6 +33,17 @@ describe("production device save", () => {
     await expect(saves.save(oldSave, oldSave.state.player)).rejects.toThrow("別のタブ");
   });
 
+  it("writes the latest position synchronously on pagehide and rejects a stale tab", async () => {
+    const storage = memoryStorage();
+    const saves = new DeviceSave(storage, undefined, () => "2026-09-30T00:00:00.000Z", () => id);
+    const started = await saves.startNew();
+    const hidden = saves.saveBeforeUnload(started, { ...started.state.player, x: 432 });
+    expect(hidden.revision).toBe(1);
+    expect(new DeviceSave(storage).load()?.state.player.x).toBe(432);
+    expect(() => saves.saveBeforeUnload(started, started.state.player)).toThrow(SaveConflictError);
+    expect(new DeviceSave(storage).load()?.state.player.x).toBe(432);
+  });
+
   it("retains invalid data and the prior save when storage fails", async () => {
     const invalid = memoryStorage("{broken");
     expect(() => new DeviceSave(invalid).load()).toThrow("元のデータは保持");
@@ -44,6 +55,7 @@ describe("production device save", () => {
       setItem: () => { throw new Error("quota"); },
     };
     await expect(new DeviceSave(storage).save(initial, initial.state.player)).rejects.toThrow("quota");
+    expect(() => new DeviceSave(storage).saveBeforeUnload(initial, initial.state.player)).toThrow("quota");
     expect(JSON.parse(storage.getItem()).revision).toBe(0);
   });
 });
