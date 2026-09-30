@@ -8,7 +8,10 @@ const directionLabels = { up: "上", left: "左", down: "下", right: "右" } as
 const directionArrows = { up: "↑", left: "←", down: "↓", right: "→" } as const;
 
 export function App() {
-  const store = useMemo(() => new DeviceSave(window.localStorage, navigator.locks), []);
+  const store = useMemo(() => new DeviceSave({
+    getItem: (key) => window.localStorage.getItem(key),
+    setItem: (key, value) => window.localStorage.setItem(key, value),
+  }, navigator.locks), []);
   const worldHost = useRef<HTMLDivElement>(null);
   const world = useRef<WorldHandle | null>(null);
   const current = useRef<SaveSnapshot | null>(null);
@@ -31,7 +34,8 @@ export function App() {
       setSaved(loaded);
       setHasExistingSave(loaded !== null);
     } catch (cause) {
-      setHasExistingSave(window.localStorage.getItem(SAVE_KEY) !== null);
+      try { setHasExistingSave(window.localStorage.getItem(SAVE_KEY) !== null); }
+      catch { setHasExistingSave(false); }
       setError(message(cause));
     }
     setScreen("title");

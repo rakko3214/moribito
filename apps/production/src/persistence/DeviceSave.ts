@@ -7,6 +7,14 @@ export class SaveConflictError extends Error {
   constructor() { super("別のタブで保存が更新されています。保存済みデータを読み込み直してください。"); }
 }
 
+export class SaveStorageError extends Error {
+  constructor(action: "read" | "write", cause: unknown) {
+    super(action === "read"
+      ? "端末の保存データにアクセスできません。ブラウザの保存設定を確認してください。"
+      : "端末に保存できません。空き容量やブラウザの保存設定を確認し、再試行してください。", { cause });
+  }
+}
+
 export class DeviceSave {
   constructor(
     private readonly storage: SaveStorage,
@@ -16,7 +24,9 @@ export class DeviceSave {
   ) {}
 
   load(): SaveSnapshot | null {
-    const raw = this.storage.getItem(SAVE_KEY);
+    let raw: string | null;
+    try { raw = this.storage.getItem(SAVE_KEY); }
+    catch (cause) { throw new SaveStorageError("read", cause); }
     if (raw === null) return null;
     try { return saveSchema.parse(JSON.parse(raw)); }
     catch { throw new Error("保存データを読み込めません。元のデータは保持しています。"); }
@@ -25,7 +35,7 @@ export class DeviceSave {
   startNew(): Promise<SaveSnapshot> {
     return this.withLock(() => {
       const snapshot = createNewSnapshot(this.newId(), this.now());
-      this.storage.setItem(SAVE_KEY, JSON.stringify(snapshot));
+      this.writeRaw(snapshot);
       return snapshot;
     });
   }
@@ -50,8 +60,13 @@ export class DeviceSave {
       savedAt: this.now(),
       state: { ...current.state, player },
     });
-    this.storage.setItem(SAVE_KEY, JSON.stringify(next));
+    this.writeRaw(next);
     return next;
+  }
+
+  private writeRaw(snapshot: SaveSnapshot): void {
+    try { this.storage.setItem(SAVE_KEY, JSON.stringify(snapshot)); }
+    catch (cause) { throw new SaveStorageError("write", cause); }
   }
 
   private withLock<T>(operation: () => T): Promise<T> {

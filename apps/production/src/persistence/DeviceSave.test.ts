@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { createNewSnapshot, SAVE_KEY } from "../domain/save.js";
-import { DeviceSave, SaveConflictError } from "./DeviceSave.js";
+import { DeviceSave, SaveConflictError, SaveStorageError } from "./DeviceSave.js";
 
 function memoryStorage(initial: string | null = null) {
   let value = initial;
@@ -54,8 +54,35 @@ describe("production device save", () => {
       getItem: () => JSON.stringify(initial),
       setItem: () => { throw new Error("quota"); },
     };
-    await expect(new DeviceSave(storage).save(initial, initial.state.player)).rejects.toThrow("quota");
-    expect(() => new DeviceSave(storage).saveBeforeUnload(initial, initial.state.player)).toThrow("quota");
+    await expect(new DeviceSave(storage).save(initial, initial.state.player)).rejects.toThrow(SaveStorageError);
+    expect(() => new DeviceSave(storage).saveBeforeUnload(initial, initial.state.player)).toThrow(SaveStorageError);
     expect(JSON.parse(storage.getItem()).revision).toBe(0);
+  });
+
+  it("allows retry after a temporary storage failure", async () => {
+    const started = createNewSnapshot(id);
+    let raw = JSON.stringify(started);
+    let fail = true;
+    const storage = {
+      getItem: () => raw,
+      setItem: (_key: string, value: string) => {
+        if (fail) { fail = false; throw new Error("quota"); }
+        raw = value;
+      },
+    };
+    const saves = new DeviceSave(storage);
+    await expect(saves.save(started, { ...started.state.player, x: 450 })).rejects.toThrow("再試行してください");
+    expect(JSON.parse(raw).revision).toBe(0);
+    const recovered = await saves.save(started, { ...started.state.player, x: 450 });
+    expect(recovered.revision).toBe(1);
+    expect(saves.load()?.state.player.x).toBe(450);
+  });
+
+  it("reports denied storage access without corrupting the save", () => {
+    const saves = new DeviceSave({
+      getItem: () => { throw new Error("denied"); },
+      setItem: () => { throw new Error("denied"); },
+    });
+    expect(() => saves.load()).toThrow("保存データにアクセスできません");
   });
 });
